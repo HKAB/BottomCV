@@ -1,4 +1,4 @@
-import 'package:data_warehouse_app/app_theme.dart';
+import 'package:data_warehouse_app/config/app_theme.dart';
 import 'package:data_warehouse_app/custom_drawer/home_drawer.dart';
 import 'package:flutter/material.dart';
 

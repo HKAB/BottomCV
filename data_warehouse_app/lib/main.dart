@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:data_warehouse_app/app_theme.dart';
+import 'package:data_warehouse_app/config/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'navigation_home_screen.dart';
+import 'screens/navigation_home_screen.dart';
 import 'package:wemapgl/wemapgl.dart' as WEMAP;
 
 void main() {
