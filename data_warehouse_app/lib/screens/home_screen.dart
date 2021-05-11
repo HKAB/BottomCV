@@ -1,6 +1,6 @@
 import 'package:data_warehouse_app/config/app_theme.dart';
 import 'package:flutter/material.dart';
-import '../design_course/home_design_course.dart';
+import '../widgets/design_course/home_design_course.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);

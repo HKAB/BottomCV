@@ -1,12 +1,12 @@
 import 'package:data_warehouse_app/config/app_theme.dart';
-import 'package:data_warehouse_app/custom_drawer/drawer_user_controller.dart';
-import 'package:data_warehouse_app/custom_drawer/home_drawer.dart';
+import 'package:data_warehouse_app/widgets/custom_drawer/drawer_user_controller.dart';
+import 'package:data_warehouse_app/widgets/custom_drawer/home_drawer.dart';
 import 'package:data_warehouse_app/screens/feedback_screen.dart';
 import 'package:data_warehouse_app/screens/help_screen.dart';
 import 'package:data_warehouse_app/screens/home_screen.dart';
 import 'package:data_warehouse_app/screens/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:data_warehouse_app/design_course/home_design_course.dart';
+import 'package:data_warehouse_app/widgets/design_course/home_design_course.dart';
 
 class NavigationHomeScreen extends StatefulWidget {
   @override

@@ -1,5 +1,5 @@
-import 'package:data_warehouse_app/design_course/design_course_app_theme.dart';
-import 'package:data_warehouse_app/design_course/models/category.dart';
+import 'package:data_warehouse_app/widgets/design_course/design_course_app_theme.dart';
+import 'package:data_warehouse_app/widgets/design_course/models/category.dart';
 import 'package:data_warehouse_app/main.dart';
 import 'package:flutter/material.dart';
 

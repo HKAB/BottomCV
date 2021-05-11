@@ -1,6 +1,6 @@
-import 'package:data_warehouse_app/design_course/category_list_view.dart';
-import 'package:data_warehouse_app/design_course/course_info_screen.dart';
-import 'package:data_warehouse_app/design_course/popular_course_list_view.dart';
+import 'package:data_warehouse_app/widgets/design_course/category_list_view.dart';
+import 'package:data_warehouse_app/widgets/design_course/course_info_screen.dart';
+import 'package:data_warehouse_app/widgets/design_course/popular_course_list_view.dart';
 import 'package:data_warehouse_app/main.dart';
 import 'package:flutter/material.dart';
 import 'design_course_app_theme.dart';
