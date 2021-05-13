@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'design_course_app_theme.dart';
 import 'package:wemapgl/wemapgl.dart';
@@ -5,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'dart:developer' as developer;
 
 class CourseInfoScreen extends StatefulWidget {
   @override
@@ -19,6 +23,40 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
+
+  // wemap part
+
+  WeMapController controller;
+  static final LatLng center = const LatLng(20.86711, 105.1947171);
+
+
+  void _onMapCreated(WeMapController controller) {
+    this.controller = controller;
+  }
+
+  void _add(String iconImage) {
+    // controller.addCircle(
+    //   CircleOptions(
+    //       geometry: LatLng(
+    //           controller.cameraPosition.target.latitude,
+    //           controller.cameraPosition.target.longitude,
+    //           // 20.86711, 105.1947171
+    //       ),
+    //       circleColor: "#ffe000"),
+    // );
+    controller.addSymbol(
+      SymbolOptions(
+        geometry: LatLng(
+          controller.cameraPosition.target.latitude,
+          controller.cameraPosition.target.longitude,
+        ),
+        iconImage: iconImage,
+        iconSize: 1/controller.cameraPosition.zoom*5,
+      ),
+    );
+    developer.log(controller.cameraPosition.toString());
+  }
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -46,29 +84,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
     });
   }
 
-  final LatLng center = const LatLng(20.080664, 105.9563837);
-
-  void onMapCreated(WeMapController controller) {
-    controller.addSymbol(SymbolOptions(
-        geometry: LatLng(
-          center.latitude,
-          center.longitude,
-        ),
-        iconImage: "airport-15"));
-    controller.addLine(
-      LineOptions(
-        geometry: [
-          LatLng(21.86711, 105.1947171),
-          LatLng(21.86711, 105.1947171),
-          LatLng(20.86711, 105.1947171),
-          LatLng(21.86711, 106.1947171),
-        ],
-        lineColor: "#ff0000",
-        lineWidth: 7.0,
-        lineOpacity: 0.5,
-      ),
-    );
-  }
   @override
   Widget build(BuildContext context) {
     final double tempHeight = MediaQuery.of(context).size.height -
@@ -111,10 +126,8 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                   child: SingleChildScrollView(
                     child: Container(
                       constraints: BoxConstraints(
-                          minHeight: infoHeight,
-                          maxHeight: tempHeight > infoHeight
-                              ? tempHeight
-                              : infoHeight),
+                          minHeight: infoHeight
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,35 +201,50 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                               ),
                             ),
                           ),
-                          Expanded(
-                            child: AnimatedOpacity(
-                              duration: const Duration(milliseconds: 500),
-                              opacity: opacity2,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 16, right: 16, top: 8, bottom: 8),
-                                child:               Container(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: Center(
-                                    child: SizedBox(
-                                      width: 300.0,
-                                      height: 300.0,
-                                      child: WeMap(
-                                        onMapCreated: onMapCreated,
-                                        initialCameraPosition: CameraPosition(
-                                          target: center,
-                                          zoom: 11.0,
-                                        ),
-                                        gestureRecognizers:
-                                        <Factory<OneSequenceGestureRecognizer>>[
-                                          Factory<OneSequenceGestureRecognizer>(
-                                                () => EagerGestureRecognizer(),
-                                          ),
-                                        ].toSet(),
-                                      ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 16, right: 16, top: 8, bottom: 8),
+                            child:               Container(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Center(
+                                child: SizedBox(
+                                  width: 300.0,
+                                  height: 300.0,
+                                  child: WeMap(
+                                    onMapCreated: _onMapCreated,
+                                    // onStyleLoadedCallback: onStyleLoadedCallback,
+                                    initialCameraPosition: CameraPosition(
+                                      target: LatLng(20.852, 105.211),
+                                      zoom: 11.0,
                                     ),
+                                    trackCameraPosition: true,
+                                    gestureRecognizers:
+                                    <Factory<OneSequenceGestureRecognizer>>[
+                                      Factory<OneSequenceGestureRecognizer>(
+                                            () => EagerGestureRecognizer(),
+                                      ),
+                                    ].toSet(),
                                   ),
                                 ),
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                              onPressed: () => _add("assets/symbols/placeholder.png"),
+                              child: const Text('add')
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 16, right: 16, top: 8, bottom: 8),
+                            child: Text(
+                              "Are you gonna bark all day, li'l doggie, or are you gonna bite",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 18,
+                                letterSpacing: 0.0,
+                                color: DesignCourseAppTheme
+                                    .darkText,
                               ),
                             ),
                           ),
