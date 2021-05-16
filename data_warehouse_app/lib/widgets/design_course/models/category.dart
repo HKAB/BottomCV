@@ -2,75 +2,75 @@ class Category {
   Category({
     this.title = '',
     this.imagePath = '',
-    this.lessonCount = 0,
-    this.money = 0,
+    this.company = '',
+    this.location = '',
     this.rating = 0.0,
   });
 
   String title;
-  int lessonCount;
-  int money;
+  String company;
+  String location;
   double rating;
   String imagePath;
 
   static List<Category> categoryList = <Category>[
     Category(
-      imagePath: 'assets/design_course/interFace1.png',
-      title: 'User interface Design',
-      lessonCount: 24,
-      money: 25,
+      imagePath: 'https://static.topcv.vn/company_logos/cong-ty-co-phan-dau-tu-va-kinh-doanh-nha-thoi-dai-5f800f8a86151.jpg',
+      title: 'Thực Tập Sinh  Full-Time Lương Hỗ Trợ 6 Triệu/Tháng',
+      company: 'CÔNG TY CỔ PHẦN ĐẦU TƯ VÀ KINH DOANH NHÀ THỜI ĐẠI',
+      location: '25',
       rating: 4.3,
     ),
     Category(
-      imagePath: 'assets/design_course/interFace2.png',
+      imagePath: 'https://static.topcv.vn/company_logos/cong-ty-co-phan-dau-tu-va-kinh-doanh-nha-thoi-dai-5f800f8a86151.jpg',
       title: 'User interface Design',
-      lessonCount: 22,
-      money: 18,
+      company: '22',
+      location: '18',
       rating: 4.6,
     ),
     Category(
-      imagePath: 'assets/design_course/interFace1.png',
+      imagePath: 'https://static.topcv.vn/company_logos/cong-ty-co-phan-dau-tu-va-kinh-doanh-nha-thoi-dai-5f800f8a86151.jpg',
       title: 'User interface Design',
-      lessonCount: 24,
-      money: 25,
+      company: '24',
+      location: '25',
       rating: 4.3,
     ),
     Category(
-      imagePath: 'assets/design_course/interFace2.png',
+      imagePath: 'https://static.topcv.vn/company_logos/cong-ty-co-phan-dau-tu-va-kinh-doanh-nha-thoi-dai-5f800f8a86151.jpg',
       title: 'User interface Design',
-      lessonCount: 22,
-      money: 18,
+      company: '22',
+      location: '18',
       rating: 4.6,
     ),
   ];
 
   static List<Category> popularCourseList = <Category>[
     Category(
-      imagePath: 'assets/design_course/interFace3.png',
+      imagePath: 'https://static.topcv.vn/company_logos/cong-ty-co-phan-dau-tu-va-kinh-doanh-nha-thoi-dai-5f800f8a86151.jpg',
       title: 'App Design Course',
-      lessonCount: 12,
-      money: 25,
+      company: '12',
+      location: '25',
       rating: 4.8,
     ),
     Category(
-      imagePath: 'assets/design_course/interFace4.png',
+      imagePath: 'https://static.topcv.vn/company_logos/cong-ty-co-phan-dau-tu-va-kinh-doanh-nha-thoi-dai-5f800f8a86151.jpg',
       title: 'Web Design Course',
-      lessonCount: 28,
-      money: 208,
+      company: '28',
+      location: '208',
       rating: 4.9,
     ),
     Category(
-      imagePath: 'assets/design_course/interFace3.png',
+      imagePath: 'https://static.topcv.vn/company_logos/cong-ty-co-phan-dau-tu-va-kinh-doanh-nha-thoi-dai-5f800f8a86151.jpg',
       title: 'App Design Course',
-      lessonCount: 12,
-      money: 25,
+      company: '12',
+      location: '25',
       rating: 4.8,
     ),
     Category(
-      imagePath: 'assets/design_course/interFace4.png',
+      imagePath: 'https://static.topcv.vn/company_logos/cong-ty-co-phan-dau-tu-va-kinh-doanh-nha-thoi-dai-5f800f8a86151.jpg',
       title: 'Web Design Course',
-      lessonCount: 28,
-      money: 208,
+      company: '28',
+      location: '208',
       rating: 4.9,
     ),
   ];

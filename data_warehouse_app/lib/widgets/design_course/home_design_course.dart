@@ -29,14 +29,21 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  height: MediaQuery.of(context).size.height,
+                  //height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: <Widget>[
                       getSearchBarUI(),
-                      getCategoryUI(),
-                      Flexible(
+                      getCategoryUI('Việc làm tốt nhất'),
+                      getCategoryUI('Việc làm hấp dẫn'),
+                      getCategoryUI('Việc làm lương cao'),
+                      getCategoryUI('Việc làm quản lý'),
+                      getCategoryUI('Việc làm IT'),
+                      getCategoryUI('Việc làm bán thời gian'),
+                      getCategoryUI('Tuyển thực tập sinh'),
+                      getCategoryUI('Việc làm mới'),
+                      /*Flexible(
                         child: getPopularCourseUI(),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
@@ -48,7 +55,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     );
   }
 
-  Widget getCategoryUI() {
+  Widget getCategoryUI(String categoryName) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +63,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
           child: Text(
-            'Category',
+            categoryName,
             textAlign: TextAlign.left,
             style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -69,7 +76,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         const SizedBox(
           height: 16,
         ),
-        Padding(
+    /*    Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Row(
             children: <Widget>[
@@ -89,7 +96,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         ),
         const SizedBox(
           height: 16,
-        ),
+        ),*/
         CategoryListView(
           callBack: () {
             moveTo();

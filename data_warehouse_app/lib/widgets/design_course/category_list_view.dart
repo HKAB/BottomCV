@@ -111,7 +111,7 @@ class CategoryView extends StatelessWidget {
                 callback();
               },
               child: SizedBox(
-                width: 280,
+                width: 380,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -135,6 +135,8 @@ class CategoryView extends StatelessWidget {
                                   Expanded(
                                     child: Container(
                                       child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Padding(
                                             padding:
@@ -151,105 +153,38 @@ class CategoryView extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          const Expanded(
-                                            child: SizedBox(),
-                                          ),
+                                          
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                right: 16, bottom: 8),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: <Widget>[
-                                                Text(
-                                                  '${category.lessonCount} lesson',
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w200,
-                                                    fontSize: 12,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .grey,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      Text(
-                                                        '${category.rating}',
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w200,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color:
-                                                              DesignCourseAppTheme
-                                                                  .grey,
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        Icons.star,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlue,
-                                                        size: 20,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
+                                                top: 4),
+                                            child: Text(
+                                              '${category.company}',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w200,
+                                                fontSize: 12,
+                                                letterSpacing: 0.27,
+                                                color:
+                                                    DesignCourseAppTheme.grey,
+                                              ),
                                             ),
                                           ),
-                                          Padding(
+                                          
+                                        /*  Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 16, right: 16),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(
-                                                  '\$${category.money}',
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlue,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlue,
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                8.0)),
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            4.0),
-                                                    child: Icon(
-                                                      Icons.add,
-                                                      color:
-                                                          DesignCourseAppTheme
-                                                              .nearlyWhite,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
+                                            child: Text(
+                                              '\$${category.money}',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 18,
+                                                letterSpacing: 0.27,
+                                                color: DesignCourseAppTheme
+                                                    .nearlyBlue,
+                                              ),
                                             ),
-                                          ),
+                                          ),*/
                                         ],
                                       ),
                                     ),
@@ -272,7 +207,7 @@ class CategoryView extends StatelessWidget {
                                   const BorderRadius.all(Radius.circular(16.0)),
                               child: AspectRatio(
                                   aspectRatio: 1.0,
-                                  child: Image.asset(category.imagePath)),
+                                  child: Image.network(category.imagePath)),
                             )
                           ],
                         ),
