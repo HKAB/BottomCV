@@ -5,8 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:data_warehouse_app/models/job.dart';
 
 class CourseInfoScreen extends StatefulWidget {
+  const CourseInfoScreen(this.jobInfo);
+  final Job jobInfo;
   @override
   _CourseInfoScreenState createState() => _CourseInfoScreenState();
 }
@@ -100,10 +103,8 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                       height: 4,
                     ),
                     ListTile(
-                      leading: Image.network(
-                          'https://static.topcv.vn/company_logos/cong-ty-co-phan-dau-tu-va-kinh-doanh-nha-thoi-dai-5f800f8a86151.jpg'),
-                      title: Text(
-                          'Thực Tập Sinh  Full-Time Lương Hỗ Trợ 6 Triệu/Tháng',
+                      leading: Image.network(widget.jobInfo.companyLogo),
+                      title: Text(widget.jobInfo.title,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 20,
@@ -111,7 +112,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                             color: DesignCourseAppTheme.darkerText,
                           )),
                       subtitle: Text(
-                        'CÔNG TY CỔ PHẦN ĐẦU TƯ VÀ KINH DOANH NHÀ THỜI ĐẠI',
+                        widget.jobInfo.companyName,
                         style: TextStyle(
                           fontWeight: FontWeight.w200,
                           fontSize: 16,
@@ -134,7 +135,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                           Expanded(
                             //width: MediaQuery.of(context).size.width,
                             child: Text(
-                              'Hạn nộp hồ sơ: 22/05/2021',
+                              widget.jobInfo.deadline,
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontWeight: FontWeight.w200,
@@ -161,7 +162,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                           Expanded(
                             // width: MediaQuery.of(context).size.width,
                             child: Text(
-                              'Số 12 – 14 Đường Số 3, Phường 11, Quận 6, TP. Hồ Chí Minh',
+                              widget.jobInfo.officeLocation,
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontWeight: FontWeight.w200,
@@ -199,7 +200,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                           ),
                         ),
                         subtitle: Text(
-                          'Hỗ trợ bộ phận kinh doanh liên hệ, đón tiếp, tư vấn, chăm sóc khách hàng;\n Hỗ trợ các thủ tục ký kết hợp đồng với khách hàng theo quy trình của công ty;\n Các công việc khác theo yêu cầu từ quản lí trực tiếp.\n + Thời gian làm việc:  8h00 - 17h30 từ Thứ 2 đến Thứ 7 + Làm việc tại:  Số 12 - 14, Đường số 3, Phường 11, Quận 6, Tp.HCM.',
+                          widget.jobInfo.description,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -235,7 +236,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                           ),
                         ),
                         subtitle: Text(
-                          'Sinh viên năm 3, năm 4 các trường Đại Học hoặc các bạn mới ra trường .\n   Có thể làm việc full time sáng: 8h00 - 12h00, chiều: 13h30 - 17h30 từ thứ 2 đến hết thứ 7.\n   Nhanh nhẹn, xử lý tình huống tốt, yêu thích kinh doanh và mong muốn gắn bó lâu dài.\n   Có khả năng làm việc teamwork…',
+                          widget.jobInfo.requirement,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -271,7 +272,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                           ),
                         ),
                         subtitle: Text(
-                          'Lương hỗ trợ: 6 triệu/tháng + hoa hồng theo năng lực (Thu nhập trung bình trên 10 triệu/tháng).\n   Hỗ trợ số liệu và dấu mộc để báo cáo thực tập nếu cần.\n   Được tham gia đầy đủ các khóa huấn luyện đào tạo, nâng cɑo kiến thức về sản phẩm và thị trường.\n   Được hưởng các quyền lợi theo quy định của Luật lao động về nghỉ tết, lễ… team building 2 lần/năm cùng các chế độ đãi ngộ khác của công ty.\n   Cơ hội trở thành nhân viên chính thức của công ty sau 2 tháng làm việc.\n   Môi trường làm việc thân thiện, nhân sự trẻ trung, cùng giúp nhau phát triển.\n   Cơ hội và lộ trình thăng tiến cao.',
+                          widget.jobInfo.welfare,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -303,7 +304,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                           child: SizedBox(
                             width: 300.0,
                             height: 300.0,
-                            child: WeMap(
+                            /* child: WeMap(
                               onMapCreated: onMapCreated,
                               initialCameraPosition: CameraPosition(
                                 target: center,
@@ -315,7 +316,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   () => EagerGestureRecognizer(),
                                 ),
                               ].toSet(),
-                            ),
+                            ),*/
                           ),
                         ),
                       ),

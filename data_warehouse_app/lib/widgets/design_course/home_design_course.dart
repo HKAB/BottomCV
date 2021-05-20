@@ -5,6 +5,7 @@ import 'package:data_warehouse_app/main.dart';
 import 'package:flutter/material.dart';
 import 'design_course_app_theme.dart';
 import 'package:location/location.dart';
+import 'package:data_warehouse_app/models/job.dart';
 
 class DesignCourseHomeScreen extends StatefulWidget {
   @override
@@ -33,14 +34,14 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                   child: Column(
                     children: <Widget>[
                       getSearchBarUI(),
-                      getCategoryUI('Việc làm tốt nhất'),
-                      getCategoryUI('Việc làm hấp dẫn'),
-                      getCategoryUI('Việc làm lương cao'),
-                      getCategoryUI('Việc làm quản lý'),
-                      getCategoryUI('Việc làm IT'),
-                      getCategoryUI('Việc làm bán thời gian'),
-                      getCategoryUI('Tuyển thực tập sinh'),
-                      getCategoryUI('Việc làm mới'),
+                      getCategoryUI('Việc làm tốt nhất', 0),
+                      getCategoryUI('Việc làm hấp dẫn', 1),
+                      getCategoryUI('Việc làm lương cao', 2),
+                      getCategoryUI('Việc làm quản lý', 3),
+                      getCategoryUI('Việc làm IT', 4),
+                      getCategoryUI('Việc làm bán thời gian', 5),
+                      getCategoryUI('Tuyển thực tập sinh', 6),
+                      getCategoryUI('Việc làm mới', 7),
                       /*Flexible(
                         child: getPopularCourseUI(),
                       ),*/
@@ -55,7 +56,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     );
   }
 
-  Widget getCategoryUI(String categoryName) {
+  Widget getCategoryUI(String categoryName, int categoryNumber) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,9 +99,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
           height: 16,
         ),*/
         CategoryListView(
-          callBack: () {
-            moveTo();
-          },
+          categoryNumber: categoryNumber,
         ),
       ],
     );
@@ -126,7 +125,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
           Flexible(
             child: PopularCourseListView(
               callBack: () {
-                moveTo();
+               // moveTo();
               },
             ),
           )
@@ -134,7 +133,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       ),
     );
   }
-
+/*
   void moveTo() async {
     final location = Location();
     final hasPermissions = await location.hasPermission();
@@ -148,7 +147,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         builder: (BuildContext context) => CourseInfoScreen(),
       ),
     );
-  }
+  }*/
 
   Widget getButtonUI(CategoryType categoryTypeData, bool isSelected) {
     String txt = '';
