@@ -1,12 +1,8 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'design_course_app_theme.dart';
 import 'package:wemapgl/wemapgl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:developer' as developer;
 
@@ -19,42 +15,86 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
     with TickerProviderStateMixin {
   final double infoHeight = 364.0;
   AnimationController animationController;
+  WeMapDirections directionAPI = WeMapDirections();
+
   Animation<double> animation;
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
 
+  // use when i can show popup on map
+  int _tripDistance = 0;
+  int _tripTime = 0;
+
   // wemap part
 
   WeMapController controller;
-  static final LatLng center = const LatLng(20.86711, 105.1947171);
-
 
   void _onMapCreated(WeMapController controller) {
     this.controller = controller;
   }
 
-  void _add(String iconImage) {
-    // controller.addCircle(
-    //   CircleOptions(
-    //       geometry: LatLng(
-    //           controller.cameraPosition.target.latitude,
-    //           controller.cameraPosition.target.longitude,
-    //           // 20.86711, 105.1947171
-    //       ),
-    //       circleColor: "#ffe000"),
-    // );
+  // help func to add picture in map
+  void _add(String iconImage, LatLng point) {
     controller.addSymbol(
       SymbolOptions(
-        geometry: LatLng(
-          controller.cameraPosition.target.latitude,
-          controller.cameraPosition.target.longitude,
-        ),
+        geometry: point,
         iconImage: iconImage,
-        iconSize: 1/controller.cameraPosition.zoom*5,
+        iconSize: 1/controller.cameraPosition.zoom*3,
       ),
     );
     developer.log(controller.cameraPosition.toString());
+  }
+
+
+  void _route(List<LatLng> points, int type) async {
+    final json = await directionAPI.getResponseMultiRoute(
+        0, points); //0 = car, 1 = bike, 2 = foot
+
+    List<LatLng> _route = directionAPI.getRoute(json);
+    List<LatLng> _waypoins = directionAPI.getWayPoints(json);
+
+    setState(() {
+      _tripDistance = directionAPI.getDistance(json);
+      _tripTime = directionAPI.getTime(json);
+    });
+
+    if (_route != null) {
+      await controller.addLine(
+        LineOptions(
+          geometry: _route,
+          lineColor: "#0071bc",
+          lineWidth: 5.0,
+          lineOpacity: 1,
+        ),
+      );
+      await controller.addSymbol(
+        SymbolOptions(
+          geometry: _waypoins[0],
+          iconImage: 'assets/symbols/office-building.png',
+          iconSize: 1/controller.cameraPosition.zoom*3,
+          iconAnchor: "bottom",
+        ),
+      );
+
+      await controller.addSymbol(
+        SymbolOptions(
+          geometry: _waypoins[1],
+          iconImage: 'assets/symbols/businessman.png',
+          iconSize: 1/controller.cameraPosition.zoom*3,
+          iconAnchor: "bottom",
+        ),
+      );
+
+      LatLngBounds latLngBounds = directionAPI.routeBounds(points[0], points[1]);
+      controller.animateCamera(
+        CameraUpdate.newLatLngBounds(
+          latLngBounds, left: 40, top: 40, right: 40, bottom: 40
+        ),
+      );
+
+      // developer.log(json.toString());
+    }
   }
 
   @override
@@ -86,9 +126,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
 
   @override
   Widget build(BuildContext context) {
-    final double tempHeight = MediaQuery.of(context).size.height -
-        (MediaQuery.of(context).size.width / 1.2) +
-        24.0;
     return Container(
       color: DesignCourseAppTheme.nearlyWhite,
       child: Scaffold(
@@ -230,8 +267,8 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                             ),
                           ),
                           TextButton(
-                              onPressed: () => _add("assets/symbols/placeholder.png"),
-                              child: const Text('add')
+                              onPressed: () => _route([LatLng(21.036751,105.782013), LatLng(21.004880,105.817432)], 0),
+                              child: const Text('route')
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
