@@ -11,6 +11,8 @@ class Job {
    final String requirement;
    final String welfare;
    final String companyLogo;
+   final double lat;
+   final double long;
   Job({
     this.id,
     this.title,
@@ -22,6 +24,8 @@ class Job {
     this.requirement,
     this.welfare,
     this.companyLogo,
+    this.lat,
+    this.long,
   });
 
   Job copyWith({
@@ -35,6 +39,8 @@ class Job {
     String requirement,
     String welfare,
     String companyLogo,
+    double lat,
+    double long,
   }) {
     return Job(
       id: id ?? this.id,
@@ -47,6 +53,8 @@ class Job {
       requirement: requirement ?? this.requirement,
       welfare: welfare ?? this.welfare,
       companyLogo: companyLogo ?? this.companyLogo,
+      lat: lat ?? this.lat,
+      long: long ?? this.long,
     );
   }
 
@@ -62,6 +70,8 @@ class Job {
       'requirement': requirement,
       'welfare': welfare,
       'companyLogo': companyLogo,
+      'lat': lat,
+      'long': long,
     };
   }
 
@@ -77,6 +87,8 @@ class Job {
       requirement: map['requirement'],
       welfare: map['welfare'],
       companyLogo: map['company_logo'],
+      lat: map['lat'],
+      long: map['long'],
     );
   }
 
@@ -86,7 +98,7 @@ class Job {
 
   @override
   String toString() {
-    return 'Job(id: $id, title: $title, companyName: $companyName, category: $category, officeLocation: $officeLocation, deadline: $deadline, description: $description, requirement: $requirement, welfare: $welfare, companyLogo: $companyLogo)';
+    return 'Job(id: $id, title: $title, companyName: $companyName, category: $category, officeLocation: $officeLocation, deadline: $deadline, description: $description, requirement: $requirement, welfare: $welfare, companyLogo: $companyLogo, lat: $lat, long: $long)';
   }
 
   @override
@@ -103,7 +115,9 @@ class Job {
       other.description == description &&
       other.requirement == requirement &&
       other.welfare == welfare &&
-      other.companyLogo == companyLogo;
+      other.companyLogo == companyLogo &&
+      other.lat == lat &&
+      other.long == long;
   }
 
   @override
@@ -117,6 +131,8 @@ class Job {
       description.hashCode ^
       requirement.hashCode ^
       welfare.hashCode ^
-      companyLogo.hashCode;
+      companyLogo.hashCode ^
+      lat.hashCode ^
+      long.hashCode;
   }
 }
