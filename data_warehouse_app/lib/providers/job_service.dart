@@ -31,4 +31,17 @@ class JobService {
       throw Exception('Failed to get job list');
     }
   }
+
+  Future<List<Job>> getNearJob(double lat, double long, double radius) async {
+    final jobListUrl = '$url/near?lat=$lat&long=$long&radius=$radius';
+    final res = await http.get(jobListUrl);
+    if (res.statusCode == 200) {
+      final decodeData = utf8.decode(res.bodyBytes);
+      final data = jsonDecode(decodeData);
+      //debugPrint('data: $data');
+      return List<Job>.from(data.map((e) => Job.fromMap(e)));
+    } else {
+      throw Exception('Failed to get job list near you');
+    }
+  }
 }

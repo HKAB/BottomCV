@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:data_warehouse_app/models/job.dart';
+import 'dart:developer' as developer;
 
 class CourseInfoScreen extends StatefulWidget {
   const CourseInfoScreen(this.jobInfo);
@@ -18,10 +19,87 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
     with TickerProviderStateMixin {
   final double infoHeight = 364.0;
   AnimationController animationController;
+  WeMapDirections directionAPI = WeMapDirections();
+
   Animation<double> animation;
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
+
+  // use when i can show popup on map
+  int _tripDistance = 0;
+  int _tripTime = 0;
+
+// wemap part
+
+  WeMapController controller;
+
+  void _onMapCreated(WeMapController controller) {
+    this.controller = controller;
+  }
+
+// help func to add picture in map
+  void _add(String iconImage, LatLng point) {
+    controller.addSymbol(
+      SymbolOptions(
+        geometry: point,
+        iconImage: iconImage,
+        iconSize: 1 / controller.cameraPosition.zoom * 3,
+      ),
+    );
+    developer.log(controller.cameraPosition.toString());
+  }
+
+  void _route(List<LatLng> points, int type) async {
+    final json = await directionAPI.getResponseMultiRoute(
+        0, points); //0 = car, 1 = bike, 2 = foot
+
+    List<LatLng> _route = directionAPI.getRoute(json);
+    List<LatLng> _waypoins = directionAPI.getWayPoints(json);
+
+    setState(() {
+      _tripDistance = directionAPI.getDistance(json);
+      _tripTime = directionAPI.getTime(json);
+    });
+
+    if (_route != null) {
+      await controller.addLine(
+        LineOptions(
+          geometry: _route,
+          lineColor: "#0071bc",
+          lineWidth: 5.0,
+          lineOpacity: 1,
+        ),
+      );
+      await controller.addSymbol(
+        SymbolOptions(
+          geometry: _waypoins[0],
+          iconImage: 'assets/symbols/office-building.png',
+          iconSize: 1 / controller.cameraPosition.zoom * 3,
+          iconAnchor: "bottom",
+        ),
+      );
+
+      await controller.addSymbol(
+        SymbolOptions(
+          geometry: _waypoins[1],
+          iconImage: 'assets/symbols/businessman.png',
+          iconSize: 1 / controller.cameraPosition.zoom * 3,
+          iconAnchor: "bottom",
+        ),
+      );
+
+      LatLngBounds latLngBounds =
+          directionAPI.routeBounds(points[0], points[1]);
+      controller.animateCamera(
+        CameraUpdate.newLatLngBounds(latLngBounds,
+            left: 40, top: 40, right: 40, bottom: 40),
+      );
+
+      // developer.log(json.toString());
+    }
+  }
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -47,30 +125,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
     setState(() {
       opacity3 = 1.0;
     });
-  }
-
-  final LatLng center = const LatLng(20.080664, 105.9563837);
-
-  void onMapCreated(WeMapController controller) {
-    controller.addSymbol(SymbolOptions(
-        geometry: LatLng(
-          center.latitude,
-          center.longitude,
-        ),
-        iconImage: "airport-15"));
-    controller.addLine(
-      LineOptions(
-        geometry: [
-          LatLng(21.86711, 105.1947171),
-          LatLng(21.86711, 105.1947171),
-          LatLng(20.86711, 105.1947171),
-          LatLng(21.86711, 106.1947171),
-        ],
-        lineColor: "#ff0000",
-        lineWidth: 7.0,
-        lineOpacity: 0.5,
-      ),
-    );
   }
 
   @override
@@ -288,41 +342,40 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                     ],
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: DesignCourseAppTheme.nearlyWhite,
-                  ),
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 500),
-                    opacity: opacity2,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16, right: 16, top: 8, bottom: 8),
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Center(
-                          child: SizedBox(
-                            width: 300.0,
-                            height: 300.0,
-                            /* child: WeMap(
-                              onMapCreated: onMapCreated,
-                              initialCameraPosition: CameraPosition(
-                                target: center,
-                                zoom: 11.0,
-                              ),
-                              gestureRecognizers:
-                                  <Factory<OneSequenceGestureRecognizer>>[
-                                Factory<OneSequenceGestureRecognizer>(
-                                  () => EagerGestureRecognizer(),
-                                ),
-                              ].toSet(),
-                            ),*/
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 8, bottom: 8),
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Center(
+                      child: SizedBox(
+                        width: 300.0,
+                        height: 300.0,
+                        child: WeMap(
+                          onMapCreated: _onMapCreated,
+                          // onStyleLoadedCallback: onStyleLoadedCallback,
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(20.852, 105.211),
+                            zoom: 11.0,
                           ),
+                          trackCameraPosition: true,
+                          gestureRecognizers:
+                              <Factory<OneSequenceGestureRecognizer>>[
+                            Factory<OneSequenceGestureRecognizer>(
+                              () => EagerGestureRecognizer(),
+                            ),
+                          ].toSet(),
                         ),
                       ),
                     ),
                   ),
                 ),
+                TextButton(
+                    onPressed: () => _route([
+                          LatLng(21.036751, 105.782013),
+                          LatLng(21.004880, 105.817432)
+                        ], 0),
+                    child: const Text('route')),
               ],
             ),
           ),
