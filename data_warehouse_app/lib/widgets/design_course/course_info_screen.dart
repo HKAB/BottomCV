@@ -3,7 +3,6 @@ import 'design_course_app_theme.dart';
 import 'package:wemapgl/wemapgl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:data_warehouse_app/models/job.dart';
 import 'dart:developer' as developer;

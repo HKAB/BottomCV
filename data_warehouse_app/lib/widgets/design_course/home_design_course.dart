@@ -1,5 +1,7 @@
+import 'package:data_warehouse_app/providers/job_service.dart';
 import 'package:data_warehouse_app/widgets/design_course/category_list_view.dart';
 import 'package:data_warehouse_app/widgets/design_course/course_info_screen.dart';
+import 'package:data_warehouse_app/widgets/design_course/job_map_screen.dart';
 import 'package:data_warehouse_app/widgets/design_course/popular_course_list_view.dart';
 import 'package:data_warehouse_app/main.dart';
 import 'package:flutter/material.dart';
@@ -52,9 +54,29 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => {moveTo()},
+          child: const Icon(Icons.location_on),
+        ),
       ),
     );
   }
+
+  void moveTo() async {
+    final location = Location();
+    final hasPermissions = await location.hasPermission();
+    if (hasPermissions != PermissionStatus.GRANTED) {
+      await location.requestPermission();
+    }
+    LocationData _locationData = await location.getLocation();
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => JobMapScreen(JobService().getNearJob(_locationData.latitude, _locationData.longitude, 100)),
+      ),
+    );
+  }
+
 
   Widget getCategoryUI(String categoryName, int categoryNumber) {
     return Column(
@@ -77,7 +99,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         const SizedBox(
           height: 16,
         ),
-    /*    Padding(
+        /*    Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Row(
             children: <Widget>[
@@ -125,7 +147,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
           Flexible(
             child: PopularCourseListView(
               callBack: () {
-               // moveTo();
+                // moveTo();
               },
             ),
           )
