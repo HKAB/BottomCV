@@ -85,16 +85,25 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
-          child: Text(
-            categoryName,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 22,
-              letterSpacing: 0.27,
-              color: DesignCourseAppTheme.darkerText,
-            ),
-          ),
+          child: RichText(
+            text: TextSpan(
+            children: [
+              TextSpan(
+                  text: categoryName,
+                  // textAlign: TextAlign.left,
+                  style: DesignCourseAppTheme.headline
+              ),
+              WidgetSpan(
+                child: Padding(
+                    padding:
+                      const EdgeInsets.only(left: 5),
+                    child: getIconByCategoryId(categoryNumber),
+                )
+              ),
+            ]
+          )
+
+          )
         ),
         const SizedBox(
           height: 16,
@@ -315,7 +324,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                   ),
                 ),
                 Text(
-                  'Design Course',
+                  'Fucking career',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -336,6 +345,34 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       ),
     );
   }
+}
+
+Widget getIconByCategoryId(int categoryId) {
+  var list_icon = [ Icons.star_rate_rounded,
+                    Icons.mood,
+                    Icons.attach_money_rounded,
+                    Icons.group,
+                    Icons.code_rounded,
+                    Icons.watch_later,
+                    Icons.emoji_people,
+                    Icons.fiber_new
+  ];
+  var list_color = [
+    Color(0xFFFFF200),
+    Color(0xFFD980FA),
+    Color(0xFF3AE374),
+    Color(0xFF17C0EB),
+    Color(0xFF3D3D3D),
+    Color(0xFF778CA3),
+    Color(0xFF0FB9B1),
+    Color(0xFFFF3F34),
+  ];
+
+  return Icon(
+    list_icon[categoryId],
+    size: 24,
+    color: list_color[categoryId],
+  );
 }
 
 enum CategoryType {

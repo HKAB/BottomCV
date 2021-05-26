@@ -162,32 +162,24 @@ class CategoryView extends StatelessWidget {
                                         children: <Widget>[
                                           Padding(
                                             padding:
-                                                const EdgeInsets.only(top: 16),
+                                                const EdgeInsets.only(top: 16, right: 8),
                                             child: Text(
-                                              category.title,
+                                              category.title.trim(),
+                                              maxLines: 3,
+                                              overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16,
-                                                letterSpacing: 0.27,
-                                                color: DesignCourseAppTheme
-                                                    .darkerText,
-                                              ),
+                                              style: DesignCourseAppTheme.title
                                             ),
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsets.only(top: 4),
+                                                const EdgeInsets.only(top: 4, right: 8),
                                             child: Text(
                                               '${category.companyName}',
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w200,
-                                                fontSize: 12,
-                                                letterSpacing: 0.27,
-                                                color:
-                                                    DesignCourseAppTheme.grey,
-                                              ),
+                                              style: DesignCourseAppTheme.subtitle,
                                             ),
                                           ),
 
