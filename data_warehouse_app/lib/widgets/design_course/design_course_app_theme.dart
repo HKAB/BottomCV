@@ -21,6 +21,7 @@ class DesignCourseAppTheme {
   static const Color cardShadowColor = Color(0xFFD0D8F3);
 
   static const Color dangerous = Color(0xFFEB4D4B);
+  static const Color warning = Color(0xFFFBC531);
   static const Color success = Color(0xFF4CD137);
   static const Color blue = Color(0xFF00A8FF);
   static const Color pink = Color(0xFFF368E0);
