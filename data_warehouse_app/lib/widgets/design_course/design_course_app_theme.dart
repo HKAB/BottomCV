@@ -18,6 +18,8 @@ class DesignCourseAppTheme {
   static const Color chipBackground = Color(0xFFEEF1F3);
   static const Color spacer = Color(0xFFF2F2F2);
 
+  static const Color cardShadowColor = Color(0xFFD0D8F3);
+
   static const TextTheme textTheme = TextTheme(
     headline4: display1,
     headline5: headline,
