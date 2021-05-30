@@ -72,11 +72,10 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => JobMapScreen(JobService().getNearJob(_locationData.latitude, _locationData.longitude, 100)),
+        builder: (BuildContext context) => JobMapScreen(_locationData),
       ),
     );
   }
-
 
   Widget getCategoryUI(String categoryName, int categoryNumber) {
     return Column(
@@ -84,27 +83,19 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
-          child: RichText(
-            text: TextSpan(
-            children: [
+            padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
+            child: RichText(
+                text: TextSpan(children: [
               TextSpan(
                   text: categoryName,
                   // textAlign: TextAlign.left,
-                  style: DesignCourseAppTheme.headline
-              ),
+                  style: DesignCourseAppTheme.headline),
               WidgetSpan(
-                child: Padding(
-                    padding:
-                      const EdgeInsets.only(left: 5),
-                    child: getIconByCategoryId(categoryNumber),
-                )
-              ),
-            ]
-          )
-
-          )
-        ),
+                  child: Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: getIconByCategoryId(categoryNumber),
+              )),
+            ]))),
         const SizedBox(
           height: 16,
         ),
@@ -164,6 +155,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       ),
     );
   }
+
 /*
   void moveTo() async {
     final location = Location();
@@ -348,14 +340,15 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
 }
 
 Widget getIconByCategoryId(int categoryId) {
-  var list_icon = [ Icons.star_rate_rounded,
-                    Icons.mood,
-                    Icons.attach_money_rounded,
-                    Icons.group,
-                    Icons.code_rounded,
-                    Icons.watch_later,
-                    Icons.emoji_people,
-                    Icons.fiber_new
+  var list_icon = [
+    Icons.star_rate_rounded,
+    Icons.mood,
+    Icons.attach_money_rounded,
+    Icons.group,
+    Icons.code_rounded,
+    Icons.watch_later,
+    Icons.emoji_people,
+    Icons.fiber_new
   ];
   var list_color = [
     Color(0xFFFFF200),
