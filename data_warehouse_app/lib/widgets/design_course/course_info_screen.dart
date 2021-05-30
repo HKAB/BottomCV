@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'description_limit_text.dart';
 import 'design_course_app_theme.dart';
 import 'package:wemapgl/wemapgl.dart';
 import 'package:flutter/foundation.dart';
@@ -7,10 +7,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:data_warehouse_app/models/job.dart';
 import 'dart:developer' as developer;
+import 'package:location/location.dart' as location_but_not_from_we_map;
 
 class CourseInfoScreen extends StatefulWidget {
   const CourseInfoScreen(this.jobInfo);
+
   final Job jobInfo;
+
   @override
   _CourseInfoScreenState createState() => _CourseInfoScreenState();
 }
@@ -33,6 +36,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
 // wemap part
 
   WeMapController controller;
+  LatLng myLatLng;
 
   void _onMapCreated(WeMapController controller) {
     this.controller = controller;
@@ -50,54 +54,79 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
     developer.log(controller.cameraPosition.toString());
   }
 
-  void _route(List<LatLng> points, int type) async {
-    final json = await directionAPI.getResponseMultiRoute(
-        0, points); //0 = car, 1 = bike, 2 = foot
-
-    List<LatLng> _route = directionAPI.getRoute(json);
-    List<LatLng> _waypoins = directionAPI.getWayPoints(json);
-
-    setState(() {
-      _tripDistance = directionAPI.getDistance(json);
-      _tripTime = directionAPI.getTime(json);
-    });
-
-    if (_route != null) {
-      await controller.addLine(
-        LineOptions(
-          geometry: _route,
-          lineColor: "#0071bc",
-          lineWidth: 5.0,
-          lineOpacity: 1,
-        ),
-      );
-      await controller.addSymbol(
-        SymbolOptions(
-          geometry: _waypoins[0],
-          iconImage: 'assets/symbols/office-building.png',
-          iconSize: 1 / controller.cameraPosition.zoom * 3,
-          iconAnchor: "bottom",
-        ),
-      );
-
-      await controller.addSymbol(
-        SymbolOptions(
-          geometry: _waypoins[1],
-          iconImage: 'assets/symbols/businessman.png',
-          iconSize: 1 / controller.cameraPosition.zoom * 3,
-          iconAnchor: "bottom",
-        ),
-      );
-
-      LatLngBounds latLngBounds =
-          directionAPI.routeBounds(points[0], points[1]);
-      controller.animateCamera(
-        CameraUpdate.newLatLngBounds(latLngBounds,
-            left: 40, top: 40, right: 40, bottom: 40),
-      );
-
-      // developer.log(json.toString());
+  Future<LatLng> _getMyCurrentLatLng() async {
+    final location = location_but_not_from_we_map.Location();
+    final hasPermissions = await location.hasPermission();
+    if (hasPermissions !=
+        location_but_not_from_we_map.PermissionStatus.GRANTED) {
+      await location.requestPermission();
     }
+
+    location_but_not_from_we_map.LocationData _locationData =
+        await location.getLocation();
+
+    return LatLng(_locationData.latitude, _locationData.longitude);
+  }
+
+  void _route(int type) async {
+    List<LatLng> points = [];
+
+    if (widget.jobInfo.lat != null) {
+      points.add(LatLng(widget.jobInfo.lat, widget.jobInfo.long));
+
+      await _getMyCurrentLatLng().then((value) => {points.add(value)});
+
+      final json = await directionAPI.getResponseMultiRoute(
+          0, points); //0 = car, 1 = bike, 2 = foot
+
+      List<LatLng> _route = directionAPI.getRoute(json);
+      List<LatLng> _waypoins = directionAPI.getWayPoints(json);
+
+      setState(() {
+        _tripDistance = directionAPI.getDistance(json);
+        _tripTime = directionAPI.getTime(json);
+      });
+
+      if (_route != null) {
+        await controller.addLine(
+          LineOptions(
+            geometry: _route,
+            lineColor: "#0071bc",
+            lineWidth: 5.0,
+            lineOpacity: 1,
+          ),
+        );
+        await controller.addSymbol(
+          SymbolOptions(
+            geometry: _waypoins[0],
+            iconImage: 'assets/symbols/office-building.png',
+            iconSize: 1 / controller.cameraPosition.zoom * 3,
+            iconAnchor: "bottom",
+          ),
+        );
+
+        await controller.addSymbol(
+          SymbolOptions(
+            geometry: _waypoins[1],
+            iconImage: 'assets/symbols/businessman.png',
+            iconSize: 1 / controller.cameraPosition.zoom * 3,
+            iconAnchor: "bottom",
+          ),
+        );
+
+        LatLngBounds latLngBounds =
+            directionAPI.routeBounds(points[0], points[1]);
+        controller.animateCamera(
+          CameraUpdate.newLatLngBounds(latLngBounds,
+              left: 40, top: 40, right: 40, bottom: 40),
+        );
+      }
+    } else
+      // points.add(LatLng(widget.jobInfo.lat, widget.jobInfo.long));
+      developer.log('Dont have job coordinate!');
+    // points.add(myLocation);
+
+    // developer.log(json.toString());
   }
 
   @override
@@ -109,6 +138,8 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
         curve: Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
     setData();
     super.initState();
+
+    _route(0);
   }
 
   Future<void> setData() async {
@@ -136,12 +167,13 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
       color: DesignCourseAppTheme.notWhite,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Chi tiết việc làm',
-              style: TextStyle(color: DesignCourseAppTheme.nearlyBlack)),
+          title:
+              Text('Chi tiết việc làm', style: DesignCourseAppTheme.headline),
           iconTheme: IconThemeData(
             color: DesignCourseAppTheme.nearlyBlack, //change your color here
           ),
-          backgroundColor: DesignCourseAppTheme.nearlyWhite,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
@@ -149,256 +181,330 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
             child: Column(
               children: <Widget>[
                 Card(
-                    child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    ListTile(
-                      leading: CachedNetworkImage(
-                        imageUrl: widget.jobInfo.companyLogo,
-                        imageBuilder: (context, imageProvider) => Container(
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(50)),
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.fill,
+                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    elevation: 5.0,
+                    margin: const EdgeInsets.only(
+                        left: 12, right: 12, top: 24, bottom: 12),
+                    child: Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 4,
                             ),
-
-                          ),
-                        ),
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            Image.asset('assets/images/company_default.png'),
-                      ),
-                      title: Text(widget.jobInfo.title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                            letterSpacing: 0.27,
-                            color: DesignCourseAppTheme.darkerText,
-                          )),
-                      subtitle: Text(
-                        widget.jobInfo.companyName,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w200,
-                          fontSize: 16,
-                          letterSpacing: 0.27,
-                          color: DesignCourseAppTheme.grey,
-                        ),
-                      ),
+                            ListTile(
+                              leading:
+                                  Image.network(widget.jobInfo.companyLogo),
+                              title: Text(widget.jobInfo.title.trim(),
+                                  style: DesignCourseAppTheme.cardTitle),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(widget.jobInfo.companyName,
+                                style: DesignCourseAppTheme.cardSubTitle,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            RichText(
+                              text: TextSpan(children: [
+                                WidgetSpan(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(right: 6),
+                                  child: Icon(
+                                    Icons.watch_later,
+                                    size: 18,
+                                    color: DesignCourseAppTheme.dangerous,
+                                  ),
+                                )),
+                                TextSpan(
+                                    style: TextStyle(
+                                      color: DesignCourseAppTheme.dangerous,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: (widget.jobInfo.deadline == null
+                                            ? "Hạn nộp hồ sơ: Không"
+                                            : widget.jobInfo.deadline),
+                                        // dirty trick
+                                        style: DesignCourseAppTheme.cardContent,
+                                      )
+                                    ])
+                              ]),
+                            )
+                          ],
+                        ))),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Flexible(
-                      child: Row(
+                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    elevation: 5.0,
+                    margin: const EdgeInsets.only(
+                        left: 12, right: 12, top: 12, bottom: 12),
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Icon(Icons.date_range_rounded,
-                              color: DesignCourseAppTheme.grey, size: 20),
                           SizedBox(
-                            width: 8,
+                            height: 4,
                           ),
-                          Expanded(
-                            //width: MediaQuery.of(context).size.width,
-                            child: Text(
-                              widget.jobInfo.deadline,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w200,
-                                fontSize: 16,
-                                letterSpacing: 0.27,
-                                color: DesignCourseAppTheme.grey,
-                              ),
+                          ListTile(
+                            title: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    style: TextStyle(
+                                      color: DesignCourseAppTheme.dangerous,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Mô tả công việc',
+                                        style: DesignCourseAppTheme.cardTitle,
+                                      )
+                                    ]),
+                                WidgetSpan(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(left: 6),
+                                  child: Icon(
+                                    Icons.description,
+                                    size: 22,
+                                    color: DesignCourseAppTheme.blue,
+                                  ),
+                                )),
+                              ]),
                             ),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: new DescriptionTextWidget(
+                                  text: widget.jobInfo.description.trim()),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 4,
                           ),
                         ],
                       ),
+                    )),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Flexible(
-                      child: Row(
+                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    elevation: 5.0,
+                    margin: const EdgeInsets.only(
+                        left: 12, right: 12, top: 12, bottom: 12),
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Icon(Icons.location_on_outlined,
-                              color: DesignCourseAppTheme.grey, size: 20),
                           SizedBox(
-                            width: 8,
+                            height: 4,
                           ),
-                          Expanded(
-                            // width: MediaQuery.of(context).size.width,
-                            child: Text(
-                              widget.jobInfo.officeLocation,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w200,
-                                fontSize: 16,
-                                letterSpacing: 0.27,
-                                color: DesignCourseAppTheme.grey,
-                              ),
+                          ListTile(
+                            title: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    style: TextStyle(
+                                      color: DesignCourseAppTheme.dangerous,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Yêu cầu công việc',
+                                        style: DesignCourseAppTheme.cardTitle,
+                                      )
+                                    ]),
+                                WidgetSpan(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(left: 6),
+                                  child: Icon(
+                                    Icons.fact_check,
+                                    size: 22,
+                                    color: DesignCourseAppTheme.success,
+                                  ),
+                                )),
+                              ]),
                             ),
+                            subtitle: DescriptionTextWidget(
+                                text: widget.jobInfo.requirement.trim()),
+                          ),
+                          SizedBox(
+                            height: 4,
                           ),
                         ],
                       ),
+                    )),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                  ],
-                )),
-                Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 4,
-                      ),
-                      ListTile(
-                        title: Text(
-                          'Mô tả công việc',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            letterSpacing: 0.27,
-                            color: DesignCourseAppTheme.darkerText,
+                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    elevation: 5.0,
+                    margin: const EdgeInsets.only(
+                        left: 12, right: 12, top: 12, bottom: 12),
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 4,
                           ),
-                        ),
-                        subtitle: Text(
-                          widget.jobInfo.description,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17,
-                            letterSpacing: 0.27,
-                            color: DesignCourseAppTheme.nearlyBlack,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                    ],
-                  ),
-                ),
-                Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 4,
-                      ),
-                      ListTile(
-                        title: Text(
-                          'Yêu cầu công việc',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            letterSpacing: 0.27,
-                            color: DesignCourseAppTheme.darkerText,
-                          ),
-                        ),
-                        subtitle: Text(
-                          widget.jobInfo.requirement,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17,
-                            letterSpacing: 0.27,
-                            color: DesignCourseAppTheme.nearlyBlack,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                    ],
-                  ),
-                ),
-                Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 4,
-                      ),
-                      ListTile(
-                        title: Text(
-                          'Quyền lợi',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            letterSpacing: 0.27,
-                            color: DesignCourseAppTheme.darkerText,
-                          ),
-                        ),
-                        subtitle: Text(
-                          widget.jobInfo.welfare,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17,
-                            letterSpacing: 0.27,
-                            color: DesignCourseAppTheme.nearlyBlack,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 8, bottom: 8),
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Center(
-                      child: SizedBox(
-                        width: 300.0,
-                        height: 300.0,
-                        child: WeMap(
-                          onMapCreated: _onMapCreated,
-                          // onStyleLoadedCallback: onStyleLoadedCallback,
-                          initialCameraPosition: CameraPosition(
-                            target: LatLng(20.852, 105.211),
-                            zoom: 11.0,
-                          ),
-                          trackCameraPosition: true,
-                          gestureRecognizers:
-                              <Factory<OneSequenceGestureRecognizer>>[
-                            Factory<OneSequenceGestureRecognizer>(
-                              () => EagerGestureRecognizer(),
+                          ListTile(
+                            title: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    style: TextStyle(
+                                      color: DesignCourseAppTheme.dangerous,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Quyền lợi',
+                                        style: DesignCourseAppTheme.cardTitle,
+                                      )
+                                    ]),
+                                WidgetSpan(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(left: 6),
+                                  child: Icon(
+                                    Icons.volunteer_activism,
+                                    size: 22,
+                                    color: DesignCourseAppTheme.pink,
+                                  ),
+                                )),
+                              ]),
                             ),
-                          ].toSet(),
-                        ),
+                            subtitle: DescriptionTextWidget(
+                                text: widget.jobInfo.welfare.trim()),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                        ],
                       ),
+                    )),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                  ),
-                ),
-                TextButton(
-                    onPressed: () => _route([
-                          LatLng(21.036751, 105.782013),
-                          LatLng(21.004880, 105.817432)
-                        ], 0),
-                    child: const Text('route')),
+                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    elevation: 5.0,
+                    margin: const EdgeInsets.only(
+                        left: 12, right: 12, top: 12, bottom: 12),
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 4,
+                          ),
+                          ListTile(
+                            title: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    style: TextStyle(
+                                      color: DesignCourseAppTheme.dangerous,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Đường đi',
+                                        style: DesignCourseAppTheme.cardTitle,
+                                      )
+                                    ]),
+                                WidgetSpan(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(left: 6),
+                                  child: Icon(
+                                    Icons.map_rounded,
+                                    size: 22,
+                                    color: DesignCourseAppTheme.marazineBlue,
+                                  ),
+                                )),
+                              ]),
+                            ),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 0, right: 0, top: 8, bottom: 8),
+                              child: Column(
+                                children: <Widget>[
+                                  Center(child: getDistanceChip()),
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 16),
+                                    child: Center(
+                                      child: SizedBox(
+                                        width: 350.0,
+                                        height: 300.0,
+                                        child: WeMap(
+                                          onMapCreated: _onMapCreated,
+                                          // onStyleLoadedCallback: onStyleLoadedCallback,
+                                          initialCameraPosition: CameraPosition(
+                                            target: LatLng(20.852, 105.211),
+                                            zoom: 11.0,
+                                          ),
+                                          trackCameraPosition: true,
+                                          gestureRecognizers: <
+                                              Factory<
+                                                  OneSequenceGestureRecognizer>>[
+                                            Factory<
+                                                OneSequenceGestureRecognizer>(
+                                              () => EagerGestureRecognizer(),
+                                            ),
+                                          ].toSet(),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 4,
+                          ),
+                        ],
+                      ),
+                    )),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget getDistanceChip() {
+    if (_tripDistance > 0.1) {
+      return Chip(
+        backgroundColor: DesignCourseAppTheme.blue,
+        label: Text("Quãng đường: " + (_tripDistance / 1000).toString() + " km",
+            style: TextStyle(
+              color: DesignCourseAppTheme.nearlyWhite,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto',
+            )),
+      );
+    }
+
+    return Chip(
+      backgroundColor: DesignCourseAppTheme.warning,
+      label: Text("Không thể hiển thị quãng đường!",
+          style: TextStyle(
+            color: DesignCourseAppTheme.nearlyWhite,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Roboto',
+          )),
     );
   }
 
