@@ -1,6 +1,7 @@
 import 'package:data_warehouse_app/providers/job_service.dart';
 import 'package:data_warehouse_app/widgets/design_course/category_list_view.dart';
 import 'package:data_warehouse_app/widgets/design_course/course_info_screen.dart';
+import 'package:data_warehouse_app/widgets/design_course/job_list_screen.dart';
 import 'package:data_warehouse_app/widgets/design_course/job_map_screen.dart';
 import 'package:data_warehouse_app/widgets/design_course/popular_course_list_view.dart';
 import 'package:data_warehouse_app/main.dart';
@@ -72,30 +73,46 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => JobMapScreen(_locationData),
+        builder: (BuildContext context) => JobMapScreen(JobService()
+            .getNearJob(_locationData.latitude, _locationData.longitude, 100)),
+      ),
+    );
+  }
+
+  void moveToFullList(String categoryName, Future<List<Job>> jobList) async {
+  
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => JobListScreen(categoryName, jobList),
       ),
     );
   }
 
   Widget getCategoryUI(String categoryName, int categoryNumber) {
+    Future <List<Job>> jobList; 
+    jobList = JobService().getJobByCategory(categoryNumber);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
             padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
-            child: RichText(
-                text: TextSpan(children: [
-              TextSpan(
-                  text: categoryName,
-                  // textAlign: TextAlign.left,
-                  style: DesignCourseAppTheme.headline),
-              WidgetSpan(
-                  child: Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: getIconByCategoryId(categoryNumber),
-              )),
-            ]))),
+            child: InkWell(
+              child: RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: categoryName,
+                    // textAlign: TextAlign.left,
+                    style: DesignCourseAppTheme.headline),
+                WidgetSpan(
+                    child: Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: getIconByCategoryId(categoryNumber),
+                )),
+              ])),
+              onTap: () => {moveToFullList(categoryName, jobList)},
+            )),
         const SizedBox(
           height: 16,
         ),
@@ -121,7 +138,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
           height: 16,
         ),*/
         CategoryListView(
-          categoryNumber: categoryNumber,
+          jobList: jobList,
         ),
       ],
     );
@@ -155,7 +172,6 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       ),
     );
   }
-
 /*
   void moveTo() async {
     final location = Location();

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data_warehouse_app/models/job.dart';
 import 'package:data_warehouse_app/providers/job_service.dart';
 import 'package:data_warehouse_app/widgets/design_course/design_course_app_theme.dart';
@@ -8,9 +9,9 @@ import 'package:location/location.dart';
 import 'package:data_warehouse_app/widgets/design_course/course_info_screen.dart';
 
 class CategoryListView extends StatefulWidget {
-  const CategoryListView({Key key, this.categoryNumber}) : super(key: key);
-  
-  final int categoryNumber;
+  const CategoryListView({Key key, this.jobList}) : super(key: key);
+
+  final Future<List<Job>> jobList;
   @override
   _CategoryListViewState createState() => _CategoryListViewState();
 }
@@ -45,7 +46,7 @@ class _CategoryListViewState extends State<CategoryListView>
         height: 134,
         width: double.infinity,
         child: FutureBuilder<List<Job>>(
-          future: JobService().getJobByCategory(widget.categoryNumber),
+          future: widget.jobList,
           builder: (BuildContext context, AsyncSnapshot<List<Job>> snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox();
@@ -98,8 +99,6 @@ class _CategoryListViewState extends State<CategoryListView>
     );
   }
 }
-
-
 
 class CategoryView extends StatelessWidget {
   const CategoryView(
@@ -161,25 +160,25 @@ class CategoryView extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 16, right: 8),
-                                            child: Text(
-                                              category.title.trim(),
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.left,
-                                              style: DesignCourseAppTheme.title
-                                            ),
+                                            padding: const EdgeInsets.only(
+                                                top: 16, right: 8),
+                                            child: Text(category.title.trim(),
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.left,
+                                                style:
+                                                    DesignCourseAppTheme.title),
                                           ),
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 4, right: 8),
+                                            padding: const EdgeInsets.only(
+                                                top: 4, right: 8),
                                             child: Text(
                                               '${category.companyName}',
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
-                                              style: DesignCourseAppTheme.subtitle,
+                                              style:
+                                                  DesignCourseAppTheme.subtitle,
                                             ),
                                           ),
 
@@ -220,7 +219,13 @@ class CategoryView extends StatelessWidget {
                                   const BorderRadius.all(Radius.circular(16.0)),
                               child: AspectRatio(
                                   aspectRatio: 1.0,
-                                  child: Image.network(category.companyLogo)),
+                                  child: CachedNetworkImage(
+                                    imageUrl: category.companyLogo,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset('assets/images/company_default.png'),
+                                  )),
                             )
                           ],
                         ),

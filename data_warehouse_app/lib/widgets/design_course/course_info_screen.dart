@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'design_course_app_theme.dart';
 import 'package:wemapgl/wemapgl.dart';
@@ -156,7 +157,25 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                       height: 4,
                     ),
                     ListTile(
-                      leading: Image.network(widget.jobInfo.companyLogo),
+                      leading: CachedNetworkImage(
+                        imageUrl: widget.jobInfo.companyLogo,
+                        imageBuilder: (context, imageProvider) => Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.fill,
+                            ),
+
+                          ),
+                        ),
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            Image.asset('assets/images/company_default.png'),
+                      ),
                       title: Text(widget.jobInfo.title,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
