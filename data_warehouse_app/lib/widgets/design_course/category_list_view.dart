@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data_warehouse_app/models/job.dart';
 import 'package:data_warehouse_app/providers/job_service.dart';
-import 'package:data_warehouse_app/widgets/design_course/design_course_app_theme.dart';
+import 'package:data_warehouse_app/widgets/design_course/app_theme.dart';
 import 'package:data_warehouse_app/widgets/design_course/models/category.dart';
 import 'package:data_warehouse_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:location/location.dart';
-import 'package:data_warehouse_app/widgets/design_course/course_info_screen.dart';
+import 'package:data_warehouse_app/widgets/design_course/job_info_screen.dart';
 
 class CategoryListView extends StatefulWidget {
   const CategoryListView({Key key, this.jobList}) : super(key: key);
@@ -94,7 +95,7 @@ class _CategoryListViewState extends State<CategoryListView>
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => CourseInfoScreen(thisJob),
+        builder: (BuildContext context) => JobInfoScreen(thisJob),
       ),
     );
   }
@@ -167,7 +168,7 @@ class CategoryView extends StatelessWidget {
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.left,
                                                 style:
-                                                    DesignCourseAppTheme.title),
+                                                    AppTheme.title),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
@@ -178,7 +179,7 @@ class CategoryView extends StatelessWidget {
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style:
-                                                  DesignCourseAppTheme.subtitle,
+                                                  AppTheme.subtitle,
                                             ),
                                           ),
 
@@ -222,7 +223,10 @@ class CategoryView extends StatelessWidget {
                                   child: CachedNetworkImage(
                                     imageUrl: category.companyLogo,
                                     placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
+                                        SpinKitDoubleBounce(
+                                          color: AppTheme.grey,
+                                          size: 50.0,
+                                        ),
                                     errorWidget: (context, url, error) =>
                                         Image.asset('assets/images/company_default.png'),
                                   )),

@@ -1,5 +1,5 @@
 import 'package:data_warehouse_app/providers/job_service.dart';
-import 'package:data_warehouse_app/widgets/design_course/design_course_app_theme.dart';
+import 'package:data_warehouse_app/widgets/design_course/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:data_warehouse_app/models/job.dart';
 import 'package:flutter/widgets.dart';
@@ -85,14 +85,14 @@ class _JobMapScreenState extends State<JobMapScreen> {
                   text: TextSpan(
                     children: [
                       TextSpan(text: 'You found ',
-                          style: DesignCourseAppTheme.headline,
+                          style: AppTheme.headline,
                           ),
                         TextSpan(
                           text: listJob.length.toString(),
-                          style: DesignCourseAppTheme.headlineHighlight,
+                          style: AppTheme.headlineHighlight,
                         ),
                       TextSpan(text: ' job',
-                        style: DesignCourseAppTheme.headline,
+                        style: AppTheme.headline,
                       ),
                     ]
                   ),
@@ -103,14 +103,14 @@ class _JobMapScreenState extends State<JobMapScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Later', style: DesignCourseAppTheme.actionPopupCancelButton,),
+              child: const Text('Later', style: AppTheme.actionPopupCancelButton,),
               onPressed: () {
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
             ),
             TextButton(
-              child: const Text('Discover it!', style: DesignCourseAppTheme.actionPopupMainButton,),
+              child: const Text('Discover it!', style: AppTheme.actionPopupMainButton,),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.push<dynamic>(
@@ -337,7 +337,7 @@ class _JobMapScreenState extends State<JobMapScreen> {
         Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                color: DesignCourseAppTheme.nearlyWhite,
+                color: AppTheme.nearlyWhite,
                 boxShadow: [
                   BoxShadow(color: Color(0xFFD0D8F3), blurRadius: 5)
                 ]),

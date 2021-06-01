@@ -1,27 +1,27 @@
 import 'package:data_warehouse_app/providers/job_service.dart';
 import 'package:data_warehouse_app/widgets/design_course/category_list_view.dart';
-import 'package:data_warehouse_app/widgets/design_course/course_info_screen.dart';
+import 'package:data_warehouse_app/widgets/design_course/job_info_screen.dart';
 import 'package:data_warehouse_app/widgets/design_course/job_list_screen.dart';
 import 'package:data_warehouse_app/widgets/design_course/job_map_screen.dart';
 import 'package:data_warehouse_app/widgets/design_course/popular_course_list_view.dart';
 import 'package:data_warehouse_app/main.dart';
 import 'package:flutter/material.dart';
-import 'design_course_app_theme.dart';
+import 'app_theme.dart';
 import 'package:location/location.dart';
 import 'package:data_warehouse_app/models/job.dart';
 
-class DesignCourseHomeScreen extends StatefulWidget {
+class BottomCVHomeScreen extends StatefulWidget {
   @override
-  _DesignCourseHomeScreenState createState() => _DesignCourseHomeScreenState();
+  _BottomCVHomeScreenState createState() => _BottomCVHomeScreenState();
 }
 
-class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
+class _BottomCVHomeScreenState extends State<BottomCVHomeScreen> {
   CategoryType categoryType = CategoryType.ui;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: DesignCourseAppTheme.nearlyWhite,
+      color: AppTheme.nearlyWhite,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Column(
@@ -103,7 +103,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                 TextSpan(
                     text: categoryName,
                     // textAlign: TextAlign.left,
-                    style: DesignCourseAppTheme.headline),
+                    style: AppTheme.headline),
                 WidgetSpan(
                     child: Padding(
                   padding: const EdgeInsets.only(left: 5),
@@ -157,7 +157,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
               fontWeight: FontWeight.w600,
               fontSize: 22,
               letterSpacing: 0.27,
-              color: DesignCourseAppTheme.darkerText,
+              color: AppTheme.darkerText,
             ),
           ),
           Flexible(
@@ -200,10 +200,10 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       child: Container(
         decoration: BoxDecoration(
             color: isSelected
-                ? DesignCourseAppTheme.nearlyBlue
-                : DesignCourseAppTheme.nearlyWhite,
+                ? AppTheme.nearlyBlue
+                : AppTheme.nearlyWhite,
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            border: Border.all(color: DesignCourseAppTheme.nearlyBlue)),
+            border: Border.all(color: AppTheme.nearlyBlue)),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -226,8 +226,8 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                     fontSize: 12,
                     letterSpacing: 0.27,
                     color: isSelected
-                        ? DesignCourseAppTheme.nearlyWhite
-                        : DesignCourseAppTheme.nearlyBlue,
+                        ? AppTheme.nearlyWhite
+                        : AppTheme.nearlyBlue,
                   ),
                 ),
               ),
@@ -270,7 +270,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                             fontFamily: 'WorkSans',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: DesignCourseAppTheme.nearlyBlue,
+                            color: AppTheme.nearlyBlue,
                           ),
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
@@ -327,17 +327,17 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
                     letterSpacing: 0.2,
-                    color: DesignCourseAppTheme.grey,
+                    color: AppTheme.grey,
                   ),
                 ),
                 Text(
-                  'Fucking career',
+                  'best career from here',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
                     letterSpacing: 0.27,
-                    color: DesignCourseAppTheme.darkerText,
+                    color: AppTheme.darkerText,
                   ),
                 ),
               ],

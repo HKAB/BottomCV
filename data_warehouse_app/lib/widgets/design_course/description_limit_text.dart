@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
-import 'design_course_app_theme.dart';
+import 'app_theme.dart';
 
 // shamelessly copy from https://stackoverflow.com/questions/49572747/flutter-how-to-hide-or-show-more-text-within-certain-length
 class DescriptionTextWidget extends StatefulWidget {
@@ -39,12 +39,12 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
     return new Container(
       // padding: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       child: secondHalf.isEmpty
-          ? new Text(firstHalf, style: DesignCourseAppTheme.cardList)
+          ? new Text(firstHalf, style: AppTheme.cardList)
           : new Column(
               children: <Widget>[
                 new Text(
                   flag ? (firstHalf + "...") : (firstHalf + secondHalf),
-                  style: DesignCourseAppTheme.cardList,
+                  style: AppTheme.cardList,
                 ),
                 new InkWell(
                   child: new Row(

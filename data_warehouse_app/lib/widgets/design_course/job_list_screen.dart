@@ -1,12 +1,12 @@
-import 'package:data_warehouse_app/widgets/design_course/course_info_screen.dart';
+import 'package:data_warehouse_app/widgets/design_course/job_info_screen.dart';
 import 'package:flutter/material.dart';
-import 'design_course_app_theme.dart';
+import 'app_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:location/location.dart';
 import 'package:flutter/rendering.dart';
 import 'package:data_warehouse_app/models/job.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:data_warehouse_app/widgets/design_course/design_course_app_theme.dart';
+import 'package:data_warehouse_app/widgets/design_course/app_theme.dart';
 import 'package:data_warehouse_app/main.dart';
 
 class JobListScreen extends StatefulWidget {
@@ -39,13 +39,13 @@ class _JobListScreenState extends State<JobListScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: DesignCourseAppTheme.notWhite,
+      color: AppTheme.notWhite,
       child: Scaffold(
         appBar: AppBar(
           title:
-              Text(widget.categoryName, style: DesignCourseAppTheme.headline),
+              Text(widget.categoryName, style: AppTheme.headline),
           iconTheme: IconThemeData(
-            color: DesignCourseAppTheme.nearlyBlack, //change your color here
+            color: AppTheme.nearlyBlack, //change your color here
           ),
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -74,7 +74,7 @@ class _JobListScreenState extends State<JobListScreen>
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
-                              shadowColor: DesignCourseAppTheme.cardShadowColor,
+                              shadowColor: AppTheme.cardShadowColor,
                               elevation: 5.0,
                               margin: const EdgeInsets.only(
                                   left: 12, right: 12, top: 24, bottom: 12),
@@ -112,12 +112,12 @@ class _JobListScreenState extends State<JobListScreen>
                                       title: Text(theList[index].title.trim(),
                                           maxLines: 3,
                                           overflow: TextOverflow.ellipsis,
-                                          style: DesignCourseAppTheme.title),
+                                          style: AppTheme.title),
                                       subtitle: Text(
                                           theList[index].companyName.trim(),
                                           maxLines: 3,
                                           overflow: TextOverflow.ellipsis,
-                                          style: DesignCourseAppTheme.subtitle),
+                                          style: AppTheme.subtitle),
                                       onTap: () => {moveTo(theList[index])},
                                     ),
                                     const SizedBox(
@@ -145,7 +145,7 @@ class _JobListScreenState extends State<JobListScreen>
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => CourseInfoScreen(thisJob),
+        builder: (BuildContext context) => JobInfoScreen(thisJob),
       ),
     );
   }

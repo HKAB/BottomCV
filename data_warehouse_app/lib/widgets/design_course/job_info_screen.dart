@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'description_limit_text.dart';
-import 'design_course_app_theme.dart';
+import 'app_theme.dart';
 import 'package:wemapgl/wemapgl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -10,16 +10,16 @@ import 'package:data_warehouse_app/models/job.dart';
 import 'dart:developer' as developer;
 import 'package:location/location.dart' as location_but_not_from_we_map;
 
-class CourseInfoScreen extends StatefulWidget {
-  const CourseInfoScreen(this.jobInfo);
+class JobInfoScreen extends StatefulWidget {
+  const JobInfoScreen(this.jobInfo);
 
   final Job jobInfo;
 
   @override
-  _CourseInfoScreenState createState() => _CourseInfoScreenState();
+  _JobInfoScreenState createState() => _JobInfoScreenState();
 }
 
-class _CourseInfoScreenState extends State<CourseInfoScreen>
+class _JobInfoScreenState extends State<JobInfoScreen>
     with TickerProviderStateMixin {
   final double infoHeight = 364.0;
   AnimationController animationController;
@@ -165,13 +165,13 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
         (MediaQuery.of(context).size.width / 1.2) +
         24.0;
     return Container(
-      color: DesignCourseAppTheme.notWhite,
+      color: AppTheme.notWhite,
       child: Scaffold(
         appBar: AppBar(
           title:
-              Text('Chi tiết việc làm', style: DesignCourseAppTheme.headline),
+              Text('Chi tiết việc làm', style: AppTheme.headline),
           iconTheme: IconThemeData(
-            color: DesignCourseAppTheme.nearlyBlack, //change your color here
+            color: AppTheme.nearlyBlack, //change your color here
           ),
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -185,7 +185,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    shadowColor: AppTheme.cardShadowColor,
                     elevation: 5.0,
                     margin: const EdgeInsets.only(
                         left: 12, right: 12, top: 24, bottom: 12),
@@ -201,19 +201,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                             ListTile(
                               leading: CachedNetworkImage(
                                 imageUrl: widget.jobInfo.companyLogo,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  height: 100,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(50)),
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
                                 placeholder: (context, url) =>
                                     CircularProgressIndicator(),
                                 errorWidget: (context, url, error) =>
@@ -221,14 +208,14 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                         'assets/images/company_default.png'),
                               ),
                               title: Text(widget.jobInfo.title.trim(),
-                                  style: DesignCourseAppTheme.cardTitle),
+                                  style: AppTheme.cardTitle),
                             ),
                             const SizedBox(
                               height: 16,
                             ),
                             Text(
                               widget.jobInfo.companyName,
-                              style: DesignCourseAppTheme.cardSubTitle,
+                              style: AppTheme.cardSubTitle,
                             ),
                             SizedBox(
                               height: 4,
@@ -241,12 +228,12 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   child: Icon(
                                     Icons.watch_later,
                                     size: 18,
-                                    color: DesignCourseAppTheme.dangerous,
+                                    color: AppTheme.dangerous,
                                   ),
                                 )),
                                 TextSpan(
                                     style: TextStyle(
-                                      color: DesignCourseAppTheme.dangerous,
+                                      color: AppTheme.dangerous,
                                     ),
                                     children: [
                                       TextSpan(
@@ -254,7 +241,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                             ? "Hạn nộp hồ sơ: Không"
                                             : widget.jobInfo.deadline),
                                         // dirty trick
-                                        style: DesignCourseAppTheme.cardContent,
+                                        style: AppTheme.cardContent,
                                       )
                                     ])
                               ]),
@@ -265,7 +252,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    shadowColor: AppTheme.cardShadowColor,
                     elevation: 5.0,
                     margin: const EdgeInsets.only(
                         left: 12, right: 12, top: 12, bottom: 12),
@@ -283,12 +270,12 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                               text: TextSpan(children: [
                                 TextSpan(
                                     style: TextStyle(
-                                      color: DesignCourseAppTheme.dangerous,
+                                      color: AppTheme.dangerous,
                                     ),
                                     children: [
                                       TextSpan(
                                         text: 'Mô tả công việc',
-                                        style: DesignCourseAppTheme.cardTitle,
+                                        style: AppTheme.cardTitle,
                                       )
                                     ]),
                                 WidgetSpan(
@@ -297,7 +284,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   child: Icon(
                                     Icons.description,
                                     size: 22,
-                                    color: DesignCourseAppTheme.blue,
+                                    color: AppTheme.blue,
                                   ),
                                 )),
                               ]),
@@ -318,7 +305,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    shadowColor: AppTheme.cardShadowColor,
                     elevation: 5.0,
                     margin: const EdgeInsets.only(
                         left: 12, right: 12, top: 12, bottom: 12),
@@ -336,12 +323,12 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                               text: TextSpan(children: [
                                 TextSpan(
                                     style: TextStyle(
-                                      color: DesignCourseAppTheme.dangerous,
+                                      color: AppTheme.dangerous,
                                     ),
                                     children: [
                                       TextSpan(
                                         text: 'Yêu cầu công việc',
-                                        style: DesignCourseAppTheme.cardTitle,
+                                        style: AppTheme.cardTitle,
                                       )
                                     ]),
                                 WidgetSpan(
@@ -350,7 +337,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   child: Icon(
                                     Icons.fact_check,
                                     size: 22,
-                                    color: DesignCourseAppTheme.success,
+                                    color: AppTheme.success,
                                   ),
                                 )),
                               ]),
@@ -368,7 +355,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    shadowColor: AppTheme.cardShadowColor,
                     elevation: 5.0,
                     margin: const EdgeInsets.only(
                         left: 12, right: 12, top: 12, bottom: 12),
@@ -386,12 +373,12 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                               text: TextSpan(children: [
                                 TextSpan(
                                     style: TextStyle(
-                                      color: DesignCourseAppTheme.dangerous,
+                                      color: AppTheme.dangerous,
                                     ),
                                     children: [
                                       TextSpan(
                                         text: 'Quyền lợi',
-                                        style: DesignCourseAppTheme.cardTitle,
+                                        style: AppTheme.cardTitle,
                                       )
                                     ]),
                                 WidgetSpan(
@@ -400,7 +387,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   child: Icon(
                                     Icons.volunteer_activism,
                                     size: 22,
-                                    color: DesignCourseAppTheme.pink,
+                                    color: AppTheme.pink,
                                   ),
                                 )),
                               ]),
@@ -418,7 +405,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    shadowColor: DesignCourseAppTheme.cardShadowColor,
+                    shadowColor: AppTheme.cardShadowColor,
                     elevation: 5.0,
                     margin: const EdgeInsets.only(
                         left: 12, right: 12, top: 12, bottom: 12),
@@ -436,12 +423,12 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                               text: TextSpan(children: [
                                 TextSpan(
                                     style: TextStyle(
-                                      color: DesignCourseAppTheme.dangerous,
+                                      color: AppTheme.dangerous,
                                     ),
                                     children: [
                                       TextSpan(
                                         text: 'Đường đi',
-                                        style: DesignCourseAppTheme.cardTitle,
+                                        style: AppTheme.cardTitle,
                                       )
                                     ]),
                                 WidgetSpan(
@@ -450,7 +437,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                                   child: Icon(
                                     Icons.map_rounded,
                                     size: 22,
-                                    color: DesignCourseAppTheme.marazineBlue,
+                                    color: AppTheme.marazineBlue,
                                   ),
                                 )),
                               ]),
@@ -508,10 +495,10 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
   Widget getDistanceChip() {
     if (_tripDistance > 0.1) {
       return Chip(
-        backgroundColor: DesignCourseAppTheme.blue,
+        backgroundColor: AppTheme.blue,
         label: Text("Quãng đường: " + (_tripDistance / 1000).toString() + " km",
             style: TextStyle(
-              color: DesignCourseAppTheme.nearlyWhite,
+              color: AppTheme.nearlyWhite,
               fontWeight: FontWeight.bold,
               fontFamily: 'Roboto',
             )),
@@ -519,10 +506,10 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
     }
 
     return Chip(
-      backgroundColor: DesignCourseAppTheme.warning,
+      backgroundColor: AppTheme.warning,
       label: Text("Không thể hiển thị quãng đường!",
           style: TextStyle(
-            color: DesignCourseAppTheme.nearlyWhite,
+            color: AppTheme.nearlyWhite,
             fontWeight: FontWeight.bold,
             fontFamily: 'Roboto',
           )),
@@ -534,11 +521,11 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: DesignCourseAppTheme.nearlyWhite,
+          color: AppTheme.nearlyWhite,
           borderRadius: const BorderRadius.all(Radius.circular(16.0)),
           boxShadow: <BoxShadow>[
             BoxShadow(
-                color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                color: AppTheme.grey.withOpacity(0.2),
                 offset: const Offset(1.1, 1.1),
                 blurRadius: 8.0),
           ],
@@ -557,7 +544,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
                   letterSpacing: 0.27,
-                  color: DesignCourseAppTheme.nearlyBlue,
+                  color: AppTheme.nearlyBlue,
                 ),
               ),
               Text(
@@ -567,7 +554,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                   fontWeight: FontWeight.w200,
                   fontSize: 14,
                   letterSpacing: 0.27,
-                  color: DesignCourseAppTheme.grey,
+                  color: AppTheme.grey,
                 ),
               ),
             ],
