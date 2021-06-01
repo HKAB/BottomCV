@@ -73,8 +73,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => JobMapScreen(JobService()
-            .getNearJob(_locationData.latitude, _locationData.longitude, 100)),
+        builder: (BuildContext context) => JobMapScreen(_locationData),
       ),
     );
   }
