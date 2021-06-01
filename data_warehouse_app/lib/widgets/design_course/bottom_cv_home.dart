@@ -1,23 +1,27 @@
+import 'package:data_warehouse_app/providers/job_service.dart';
 import 'package:data_warehouse_app/widgets/design_course/category_list_view.dart';
-import 'package:data_warehouse_app/widgets/design_course/course_info_screen.dart';
+import 'package:data_warehouse_app/widgets/design_course/job_info_screen.dart';
+import 'package:data_warehouse_app/widgets/design_course/job_list_screen.dart';
+import 'package:data_warehouse_app/widgets/design_course/job_map_screen.dart';
 import 'package:data_warehouse_app/widgets/design_course/popular_course_list_view.dart';
 import 'package:data_warehouse_app/main.dart';
 import 'package:flutter/material.dart';
-import 'design_course_app_theme.dart';
+import 'app_theme.dart';
 import 'package:location/location.dart';
+import 'package:data_warehouse_app/models/job.dart';
 
-class DesignCourseHomeScreen extends StatefulWidget {
+class BottomCVHomeScreen extends StatefulWidget {
   @override
-  _DesignCourseHomeScreenState createState() => _DesignCourseHomeScreenState();
+  _BottomCVHomeScreenState createState() => _BottomCVHomeScreenState();
 }
 
-class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
+class _BottomCVHomeScreenState extends State<BottomCVHomeScreen> {
   CategoryType categoryType = CategoryType.ui;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: DesignCourseAppTheme.nearlyWhite,
+      color: AppTheme.nearlyWhite,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Column(
@@ -29,14 +33,21 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  height: MediaQuery.of(context).size.height,
+                  //height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: <Widget>[
                       getSearchBarUI(),
-                      getCategoryUI(),
-                      Flexible(
+                      getCategoryUI('Việc làm tốt nhất', 0),
+                      getCategoryUI('Việc làm hấp dẫn', 1),
+                      getCategoryUI('Việc làm lương cao', 2),
+                      getCategoryUI('Việc làm quản lý', 3),
+                      getCategoryUI('Việc làm IT', 4),
+                      getCategoryUI('Việc làm bán thời gian', 5),
+                      getCategoryUI('Tuyển thực tập sinh', 6),
+                      getCategoryUI('Việc làm mới', 7),
+                      /*Flexible(
                         child: getPopularCourseUI(),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
@@ -44,32 +55,67 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => {moveTo()},
+          child: const Icon(Icons.location_on),
+        ),
       ),
     );
   }
 
-  Widget getCategoryUI() {
+  void moveTo() async {
+    final location = Location();
+    final hasPermissions = await location.hasPermission();
+    if (hasPermissions != PermissionStatus.GRANTED) {
+      await location.requestPermission();
+    }
+    LocationData _locationData = await location.getLocation();
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => JobMapScreen(_locationData),
+      ),
+    );
+  }
+
+  void moveToFullList(String categoryName, Future<List<Job>> jobList) async {
+  
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => JobListScreen(categoryName, jobList),
+      ),
+    );
+  }
+
+  Widget getCategoryUI(String categoryName, int categoryNumber) {
+    Future <List<Job>> jobList;
+    jobList = JobService().getJobByCategory(categoryNumber);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
-          child: Text(
-            'Category',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 22,
-              letterSpacing: 0.27,
-              color: DesignCourseAppTheme.darkerText,
-            ),
-          ),
-        ),
+            padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
+            child: InkWell(
+              child: RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: categoryName,
+                    // textAlign: TextAlign.left,
+                    style: AppTheme.headline),
+                WidgetSpan(
+                    child: Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: getIconByCategoryId(categoryNumber),
+                )),
+              ])),
+              onTap: () => {moveToFullList(categoryName, jobList)},
+            )),
         const SizedBox(
           height: 16,
         ),
-        Padding(
+        /*    Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Row(
             children: <Widget>[
@@ -89,11 +135,9 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         ),
         const SizedBox(
           height: 16,
-        ),
+        ),*/
         CategoryListView(
-          callBack: () {
-            moveTo();
-          },
+          jobList: jobList,
         ),
       ],
     );
@@ -113,13 +157,13 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
               fontWeight: FontWeight.w600,
               fontSize: 22,
               letterSpacing: 0.27,
-              color: DesignCourseAppTheme.darkerText,
+              color: AppTheme.darkerText,
             ),
           ),
           Flexible(
             child: PopularCourseListView(
               callBack: () {
-                moveTo();
+                // moveTo();
               },
             ),
           )
@@ -127,7 +171,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       ),
     );
   }
-
+/*
   void moveTo() async {
     final location = Location();
     final hasPermissions = await location.hasPermission();
@@ -141,7 +185,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         builder: (BuildContext context) => CourseInfoScreen(),
       ),
     );
-  }
+  }*/
 
   Widget getButtonUI(CategoryType categoryTypeData, bool isSelected) {
     String txt = '';
@@ -156,10 +200,10 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       child: Container(
         decoration: BoxDecoration(
             color: isSelected
-                ? DesignCourseAppTheme.nearlyBlue
-                : DesignCourseAppTheme.nearlyWhite,
+                ? AppTheme.nearlyBlue
+                : AppTheme.nearlyWhite,
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            border: Border.all(color: DesignCourseAppTheme.nearlyBlue)),
+            border: Border.all(color: AppTheme.nearlyBlue)),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -182,8 +226,8 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                     fontSize: 12,
                     letterSpacing: 0.27,
                     color: isSelected
-                        ? DesignCourseAppTheme.nearlyWhite
-                        : DesignCourseAppTheme.nearlyBlue,
+                        ? AppTheme.nearlyWhite
+                        : AppTheme.nearlyBlue,
                   ),
                 ),
               ),
@@ -226,7 +270,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                             fontFamily: 'WorkSans',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: DesignCourseAppTheme.nearlyBlue,
+                            color: AppTheme.nearlyBlue,
                           ),
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
@@ -283,17 +327,17 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
                     letterSpacing: 0.2,
-                    color: DesignCourseAppTheme.grey,
+                    color: AppTheme.grey,
                   ),
                 ),
                 Text(
-                  'Design Course',
+                  'best career from here',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
                     letterSpacing: 0.27,
-                    color: DesignCourseAppTheme.darkerText,
+                    color: AppTheme.darkerText,
                   ),
                 ),
               ],
@@ -308,6 +352,35 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       ),
     );
   }
+}
+
+Widget getIconByCategoryId(int categoryId) {
+  var list_icon = [
+    Icons.star_rate_rounded,
+    Icons.mood,
+    Icons.attach_money_rounded,
+    Icons.group,
+    Icons.code_rounded,
+    Icons.watch_later,
+    Icons.emoji_people,
+    Icons.fiber_new
+  ];
+  var list_color = [
+    Color(0xFFFFF200),
+    Color(0xFFD980FA),
+    Color(0xFF3AE374),
+    Color(0xFF17C0EB),
+    Color(0xFF3D3D3D),
+    Color(0xFF778CA3),
+    Color(0xFF0FB9B1),
+    Color(0xFFFF3F34),
+  ];
+
+  return Icon(
+    list_icon[categoryId],
+    size: 24,
+    color: list_color[categoryId],
+  );
 }
 
 enum CategoryType {

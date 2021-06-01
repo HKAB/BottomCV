@@ -1,4 +1,4 @@
-import 'package:data_warehouse_app/widgets/design_course/design_course_app_theme.dart';
+import 'package:data_warehouse_app/widgets/design_course/app_theme.dart';
 import 'package:data_warehouse_app/widgets/design_course/models/category.dart';
 import 'package:data_warehouse_app/main.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +139,7 @@ class CategoryView extends StatelessWidget {
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 16,
                                                 letterSpacing: 0.27,
-                                                color: DesignCourseAppTheme
+                                                color: AppTheme
                                                     .darkerText,
                                               ),
                                             ),
@@ -158,13 +158,13 @@ class CategoryView extends StatelessWidget {
                                                   CrossAxisAlignment.center,
                                               children: <Widget>[
                                                 Text(
-                                                  '${category.lessonCount} lesson',
+                                                  '${category.company} lesson',
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w200,
                                                     fontSize: 12,
                                                     letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
+                                                    color: AppTheme
                                                         .grey,
                                                   ),
                                                 ),
@@ -181,14 +181,14 @@ class CategoryView extends StatelessWidget {
                                                           fontSize: 18,
                                                           letterSpacing: 0.27,
                                                           color:
-                                                              DesignCourseAppTheme
+                                                              AppTheme
                                                                   .grey,
                                                         ),
                                                       ),
                                                       Icon(
                                                         Icons.star,
                                                         color:
-                                                            DesignCourseAppTheme
+                                                            AppTheme
                                                                 .nearlyBlue,
                                                         size: 20,
                                                       ),
@@ -225,7 +225,7 @@ class CategoryView extends StatelessWidget {
                                 const BorderRadius.all(Radius.circular(16.0)),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: DesignCourseAppTheme.grey
+                                  color: AppTheme.grey
                                       .withOpacity(0.2),
                                   offset: const Offset(0.0, 0.0),
                                   blurRadius: 6.0),
@@ -236,7 +236,7 @@ class CategoryView extends StatelessWidget {
                                 const BorderRadius.all(Radius.circular(16.0)),
                             child: AspectRatio(
                                 aspectRatio: 1.28,
-                                child: Image.asset(category.imagePath)),
+                                child: Image.network(category.imagePath)),
                           ),
                         ),
                       ),

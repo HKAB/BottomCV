@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class DesignCourseAppTheme {
-  DesignCourseAppTheme._();
+class AppTheme {
+  AppTheme._();
 
   static const Color notWhite = Color(0xFFEDF0F2);
   static const Color nearlyWhite = Color(0xFFFFFFFF);
@@ -18,6 +18,16 @@ class DesignCourseAppTheme {
   static const Color chipBackground = Color(0xFFEEF1F3);
   static const Color spacer = Color(0xFFF2F2F2);
 
+  static const Color cardShadowColor = Color(0xFFD0D8F3);
+
+  static const Color dangerous = Color(0xFFEB4D4B);
+  static const Color warning = Color(0xFFFBC531);
+  static const Color success = Color(0xFF4CD137);
+  static const Color blue = Color(0xFF00A8FF);
+  static const Color pink = Color(0xFFF368E0);
+  static const Color marazineBlue = Color(0xFF273C75);
+
+
   static const TextTheme textTheme = TextTheme(
     headline4: display1,
     headline5: headline,
@@ -30,7 +40,7 @@ class DesignCourseAppTheme {
 
   static const TextStyle display1 = TextStyle(
     // h4 -> display1
-    fontFamily: 'WorkSans',
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
     fontSize: 36,
     letterSpacing: 0.4,
@@ -40,16 +50,25 @@ class DesignCourseAppTheme {
 
   static const TextStyle headline = TextStyle(
     // h5 -> headline
-    fontFamily: 'WorkSans',
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
     fontSize: 24,
     letterSpacing: 0.27,
     color: darkerText,
   );
 
+  static const TextStyle headlineHighlight = TextStyle(
+    // h5 -> headline
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.bold,
+    fontSize: 24,
+    letterSpacing: 0.27,
+    color: blue,
+  );
+
   static const TextStyle title = TextStyle(
     // h6 -> title
-    fontFamily: 'WorkSans',
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
     fontSize: 16,
     letterSpacing: 0.18,
@@ -58,16 +77,33 @@ class DesignCourseAppTheme {
 
   static const TextStyle subtitle = TextStyle(
     // subtitle2 -> subtitle
-    fontFamily: 'WorkSans',
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     fontSize: 14,
     letterSpacing: -0.04,
     color: darkText,
   );
 
+  static const TextStyle actionPopupMainButton = TextStyle(
+    // subtitle2 -> subtitle
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    letterSpacing: -0.04,
+    color: blue,
+  );
+
+  static const TextStyle actionPopupCancelButton = TextStyle(
+    // subtitle2 -> subtitle
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    color: deactivatedText,
+  );
+
   static const TextStyle body2 = TextStyle(
     // body1 -> body2
-    fontFamily: 'WorkSans',
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     fontSize: 14,
     letterSpacing: 0.2,
@@ -76,7 +112,7 @@ class DesignCourseAppTheme {
 
   static const TextStyle body1 = TextStyle(
     // body2 -> body1
-    fontFamily: 'WorkSans',
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     fontSize: 16,
     letterSpacing: -0.05,
@@ -85,10 +121,43 @@ class DesignCourseAppTheme {
 
   static const TextStyle caption = TextStyle(
     // Caption -> caption
-    fontFamily: 'WorkSans',
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     fontSize: 12,
     letterSpacing: 0.2,
     color: lightText, // was lightText
+  );
+
+  static const TextStyle cardTitle = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.bold,
+    fontSize: 22,
+    letterSpacing: 0.18,
+    color: darkerText,
+  );
+
+  static const TextStyle cardSubTitle = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w400,
+    fontSize: 15,
+    letterSpacing: 0.18,
+    color: lightText,
+  );
+
+  static const TextStyle cardContent = TextStyle(
+    fontFamily: 'Roboto',
+    // fontWeight: FontWeight.w400,
+    fontSize: 18,
+    letterSpacing: 0.18,
+    // color: lightText,
+  );
+
+  static const TextStyle cardList = TextStyle(
+    fontFamily: 'Roboto',
+    // fontWeight: FontWeight.w400,
+    fontSize: 18,
+    letterSpacing: 0.18,
+    height: 1.5,
+    color: dark_grey,
   );
 }

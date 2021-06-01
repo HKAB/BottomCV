@@ -1,12 +1,18 @@
-import 'package:data_warehouse_app/widgets/design_course/design_course_app_theme.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:data_warehouse_app/models/job.dart';
+import 'package:data_warehouse_app/providers/job_service.dart';
+import 'package:data_warehouse_app/widgets/design_course/app_theme.dart';
 import 'package:data_warehouse_app/widgets/design_course/models/category.dart';
 import 'package:data_warehouse_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:location/location.dart';
+import 'package:data_warehouse_app/widgets/design_course/job_info_screen.dart';
 
 class CategoryListView extends StatefulWidget {
-  const CategoryListView({Key key, this.callBack}) : super(key: key);
+  const CategoryListView({Key key, this.jobList}) : super(key: key);
 
-  final Function callBack;
+  final Future<List<Job>> jobList;
   @override
   _CategoryListViewState createState() => _CategoryListViewState();
 }
@@ -40,21 +46,20 @@ class _CategoryListViewState extends State<CategoryListView>
       child: Container(
         height: 134,
         width: double.infinity,
-        child: FutureBuilder<bool>(
-          future: getData(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        child: FutureBuilder<List<Job>>(
+          future: widget.jobList,
+          builder: (BuildContext context, AsyncSnapshot<List<Job>> snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox();
             } else {
+              List<Job> jobList = snapshot.data;
               return ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: Category.categoryList.length,
+                itemCount: jobList.length > 10 ? 10 : jobList.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  final int count = Category.categoryList.length > 10
-                      ? 10
-                      : Category.categoryList.length;
+                  final int count = jobList.length > 10 ? 10 : jobList.length;
                   final Animation<double> animation =
                       Tween<double>(begin: 0.0, end: 1.0).animate(
                           CurvedAnimation(
@@ -64,11 +69,11 @@ class _CategoryListViewState extends State<CategoryListView>
                   animationController.forward();
 
                   return CategoryView(
-                    category: Category.categoryList[index],
+                    category: jobList[index],
                     animation: animation,
                     animationController: animationController,
                     callback: () {
-                      widget.callBack();
+                      moveTo(jobList[index]);
                     },
                   );
                 },
@@ -76,6 +81,21 @@ class _CategoryListViewState extends State<CategoryListView>
             }
           },
         ),
+      ),
+    );
+  }
+
+  void moveTo(Job thisJob) async {
+    final location = Location();
+    final hasPermissions = await location.hasPermission();
+    if (hasPermissions != PermissionStatus.GRANTED) {
+      await location.requestPermission();
+    }
+
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => JobInfoScreen(thisJob),
       ),
     );
   }
@@ -91,7 +111,7 @@ class CategoryView extends StatelessWidget {
       : super(key: key);
 
   final VoidCallback callback;
-  final Category category;
+  final Job category;
   final AnimationController animationController;
   final Animation<dynamic> animation;
 
@@ -111,7 +131,7 @@ class CategoryView extends StatelessWidget {
                 callback();
               },
               child: SizedBox(
-                width: 280,
+                width: 380,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -135,121 +155,49 @@ class CategoryView extends StatelessWidget {
                                   Expanded(
                                     child: Container(
                                       child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 16),
+                                            padding: const EdgeInsets.only(
+                                                top: 16, right: 8),
+                                            child: Text(category.title.trim(),
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.left,
+                                                style:
+                                                    AppTheme.title),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 4, right: 8),
                                             child: Text(
-                                              category.title,
+                                              '${category.companyName}',
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style:
+                                                  AppTheme.subtitle,
+                                            ),
+                                          ),
+
+                                          /*  Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 16, right: 16),
+                                            child: Text(
+                                              '\$${category.money}',
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 16,
+                                                fontSize: 18,
                                                 letterSpacing: 0.27,
                                                 color: DesignCourseAppTheme
-                                                    .darkerText,
+                                                    .nearlyBlue,
                                               ),
                                             ),
-                                          ),
-                                          const Expanded(
-                                            child: SizedBox(),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 16, bottom: 8),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: <Widget>[
-                                                Text(
-                                                  '${category.lessonCount} lesson',
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w200,
-                                                    fontSize: 12,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .grey,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      Text(
-                                                        '${category.rating}',
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w200,
-                                                          fontSize: 18,
-                                                          letterSpacing: 0.27,
-                                                          color:
-                                                              DesignCourseAppTheme
-                                                                  .grey,
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        Icons.star,
-                                                        color:
-                                                            DesignCourseAppTheme
-                                                                .nearlyBlue,
-                                                        size: 20,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 16, right: 16),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(
-                                                  '\$${category.money}',
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 18,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlue,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: DesignCourseAppTheme
-                                                        .nearlyBlue,
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                8.0)),
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            4.0),
-                                                    child: Icon(
-                                                      Icons.add,
-                                                      color:
-                                                          DesignCourseAppTheme
-                                                              .nearlyWhite,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
+                                          ),*/
                                         ],
                                       ),
                                     ),
@@ -272,7 +220,16 @@ class CategoryView extends StatelessWidget {
                                   const BorderRadius.all(Radius.circular(16.0)),
                               child: AspectRatio(
                                   aspectRatio: 1.0,
-                                  child: Image.asset(category.imagePath)),
+                                  child: CachedNetworkImage(
+                                    imageUrl: category.companyLogo,
+                                    placeholder: (context, url) =>
+                                        SpinKitDoubleBounce(
+                                          color: AppTheme.grey,
+                                          size: 50.0,
+                                        ),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset('assets/images/company_default.png'),
+                                  )),
                             )
                           ],
                         ),

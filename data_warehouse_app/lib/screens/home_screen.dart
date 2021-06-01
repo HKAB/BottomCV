@@ -1,6 +1,6 @@
 import 'package:data_warehouse_app/config/app_theme.dart';
 import 'package:flutter/material.dart';
-import '../widgets/design_course/home_design_course.dart';
+import '../widgets/design_course/bottom_cv_home.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         if (!snapshot.hasData) {
                           return const SizedBox();
                         } else {
-                          return DesignCourseHomeScreen();
+                          return BottomCVHomeScreen();
                         }
                       },
                     ),

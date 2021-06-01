@@ -2,7 +2,8 @@
     package="com.example.data_warehouse_app">
    <application
         android:label="data_warehouse_app"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
