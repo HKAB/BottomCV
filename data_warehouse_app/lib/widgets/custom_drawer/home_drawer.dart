@@ -88,13 +88,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             width: 120,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(color: AppTheme.grey.withOpacity(0.6), offset: const Offset(2.0, 4.0), blurRadius: 8),
-                              ],
+                              // boxShadow: <BoxShadow>[
+                              //   BoxShadow(color: AppTheme.grey.withOpacity(0.6), offset: const Offset(2.0, 4.0), blurRadius: 8),
+                              // ],
                             ),
                             child: ClipRRect(
                               borderRadius: const BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.asset('assets/images/userImage.png'),
+                              child: Image.asset('assets/design_course/userImage.png'),
                             ),
                           ),
                         ),

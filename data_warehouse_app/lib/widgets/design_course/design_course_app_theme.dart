@@ -57,6 +57,15 @@ class DesignCourseAppTheme {
     color: darkerText,
   );
 
+  static const TextStyle headlineHighlight = TextStyle(
+    // h5 -> headline
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.bold,
+    fontSize: 24,
+    letterSpacing: 0.27,
+    color: blue,
+  );
+
   static const TextStyle title = TextStyle(
     // h6 -> title
     fontFamily: 'Roboto',
@@ -73,6 +82,23 @@ class DesignCourseAppTheme {
     fontSize: 14,
     letterSpacing: -0.04,
     color: darkText,
+  );
+
+  static const TextStyle actionPopupMainButton = TextStyle(
+    // subtitle2 -> subtitle
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    letterSpacing: -0.04,
+    color: blue,
+  );
+
+  static const TextStyle actionPopupCancelButton = TextStyle(
+    // subtitle2 -> subtitle
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    color: deactivatedText,
   );
 
   static const TextStyle body2 = TextStyle(

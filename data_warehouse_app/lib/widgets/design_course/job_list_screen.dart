@@ -42,13 +42,15 @@ class _JobListScreenState extends State<JobListScreen>
       color: DesignCourseAppTheme.notWhite,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.categoryName,
-              style: TextStyle(color: DesignCourseAppTheme.nearlyBlack)),
+          title:
+              Text(widget.categoryName, style: DesignCourseAppTheme.headline),
           iconTheme: IconThemeData(
             color: DesignCourseAppTheme.nearlyBlack, //change your color here
           ),
-          backgroundColor: DesignCourseAppTheme.nearlyWhite,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
+        backgroundColor: Colors.transparent,
         body: Container(
           child: FutureBuilder<List<Job>>(
               future: widget.jobList,
@@ -61,58 +63,70 @@ class _JobListScreenState extends State<JobListScreen>
                   return ListView.builder(
                       itemCount: theList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          shadowColor: DesignCourseAppTheme.cardShadowColor,
-                          elevation: 5.0,
-                          margin: const EdgeInsets.only(
-                              left: 12, right: 12, top: 24, bottom: 12),
-                          child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                ListTile(
-                                  leading: CachedNetworkImage(
-                                    imageUrl: theList[index].companyLogo,
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      height: 100,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50)),
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    ),
-                                    placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        Image.asset(
-                                            'assets/images/company_default.png'),
-                                  ),
-                                  title: Text(theList[index].title,
-                                      style: DesignCourseAppTheme.title),
-                                  subtitle: Text(theList[index].companyName,
-                                      style: DesignCourseAppTheme.subtitle),
-                                  onTap: () => {moveTo(theList[index])},
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                              ],
+                        return ConstrainedBox(
+                            constraints: new BoxConstraints(
+                              minHeight: 15,
+                              // minWidth: 5.0,
+                              // maxHeight: 30.0,
+                              // maxWidth: 30.0,
                             ),
-                          ),
-                        );
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              shadowColor: DesignCourseAppTheme.cardShadowColor,
+                              elevation: 5.0,
+                              margin: const EdgeInsets.only(
+                                  left: 12, right: 12, top: 24, bottom: 12),
+                              child: Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    ListTile(
+                                      leading: CachedNetworkImage(
+                                        imageUrl: theList[index].companyLogo,
+                                        // imageBuilder: (context, imageProvider) =>
+                                        //     Container(
+                                        //   height: 100,
+                                        //   width: 100,
+                                        //   decoration: BoxDecoration(
+                                        //     borderRadius: BorderRadius.all(
+                                        //         Radius.circular(50)),
+                                        //     image: DecorationImage(
+                                        //       image: imageProvider,
+                                        //       fit: BoxFit.fill,
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        placeholder: (context, url) =>
+                                            CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            Image.asset(
+                                                'assets/images/company_default.png'),
+                                      ),
+                                      title: Text(theList[index].title.trim(),
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: DesignCourseAppTheme.title),
+                                      subtitle: Text(
+                                          theList[index].companyName.trim(),
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: DesignCourseAppTheme.subtitle),
+                                      onTap: () => {moveTo(theList[index])},
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
                       });
                 }
               }),

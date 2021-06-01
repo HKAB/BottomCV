@@ -73,8 +73,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => JobMapScreen(JobService()
-            .getNearJob(_locationData.latitude, _locationData.longitude, 100)),
+        builder: (BuildContext context) => JobMapScreen(_locationData),
       ),
     );
   }
@@ -90,7 +89,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
   }
 
   Widget getCategoryUI(String categoryName, int categoryNumber) {
-    Future <List<Job>> jobList; 
+    Future <List<Job>> jobList;
     jobList = JobService().getJobByCategory(categoryNumber);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
