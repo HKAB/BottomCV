@@ -83,7 +83,7 @@ class _BottomCVHomeScreenState extends State<BottomCVHomeScreen> {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => JobListScreen(categoryName, jobList),
+        builder: (BuildContext context) => JobListScreen(categoryName, jobList, null),
       ),
     );
   }

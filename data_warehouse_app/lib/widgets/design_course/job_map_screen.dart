@@ -50,8 +50,12 @@ class _JobMapScreenState extends State<JobMapScreen> {
   WeMapPlace place;
   double _searchRange = 5.0;
   List<Job> nearByJob;
+  List p; // parent of Job
+
   Circle _circleWeNeedButWeNotDeserved;
   double lastZoom;
+
+  List<Symbol> unionSymbols;
 
 
   final snackBar = SnackBar(
@@ -65,7 +69,7 @@ class _JobMapScreenState extends State<JobMapScreen> {
     ),
   );
 
-  Future<void> _showMyDialog(List<Job> listJob, double lat, double long, double radius) {
+  Future<void> _showMyDialog(List<Job> listJob) {
 
     return showDialog<void>(
       context: context,
@@ -116,7 +120,7 @@ class _JobMapScreenState extends State<JobMapScreen> {
                 Navigator.push<dynamic>(
                   context,
                   MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) => JobListScreen("Quanh bạn " + _searchRange.toString() + ' km', JobService().getNearJob(lat, long, radius)),
+                    builder: (BuildContext context) => JobListScreen("Quanh bạn " + _searchRange.toString() + ' km', null, nearByJob),
                   ),
                 );
               },
@@ -125,6 +129,27 @@ class _JobMapScreenState extends State<JobMapScreen> {
         );
       },
     );
+  }
+
+  void _onSymbolTapped(Symbol symbol) async {
+    int symbolUnion = unionSymbols.indexOf(symbol);
+
+    List<Job> listJobInUnion = new List();
+    for (int i = 0; i < nearByJob.length; i++) {
+      if (p[i] == symbolUnion) {
+        listJobInUnion.add(nearByJob[i]);
+      }
+    }
+
+    developer.log(listJobInUnion.length.toString() + ' is tapped.');
+
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => JobListScreen("Quanh bạn " + _searchRange.toString() + ' km (' + listJobInUnion.length.toString() + ')', null, listJobInUnion),
+      ),
+    );
+
   }
 
   void _onMapCreated(WeMapController controller) {
@@ -136,6 +161,7 @@ class _JobMapScreenState extends State<JobMapScreen> {
     mapController.setSymbolTextIgnorePlacement(true);
 
     mapController.addListener(_onMapChanged);
+    mapController.onSymbolTapped.add(_onSymbolTapped);
     _extractMapInfo();
   }
 
@@ -192,8 +218,9 @@ class _JobMapScreenState extends State<JobMapScreen> {
 
     // simple union algorithm, start with a random point (can be improve by first find largest polygon and unify from these vertexes)
     var union = new List.filled(nearByJob.length, new LatLngUnion(0.0, 0.0, 0));
-    double threshold = 2;
-    var p = new List.filled(nearByJob.length, 0);
+    double threshold = _searchRange/2;
+
+    p = new List.filled(nearByJob.length, 0);
     for (int i = 0; i < nearByJob.length; i++) {
       p[i] = i;
       union[i] = new LatLngUnion(0.0, 0.0, 0);
@@ -244,12 +271,12 @@ class _JobMapScreenState extends State<JobMapScreen> {
           left: 10, top: 10, right: 10, bottom: 10),
     );
 
-    // mapController.addCircle(CircleOptions(
-    //   geometry: LatLng(lat - radius / 111.32, long),
-    //   circleRadius: 5,
-    //   circleColor: "#00b894",
-    //   // circleOpacity: 0.6
-    // ));
+    mapController.addCircle(CircleOptions(
+      geometry: LatLng(lat, long),
+      circleRadius: 5,
+      circleColor: "#e74c3c",
+      // circleOpacity: 0.6
+    ));
     //
     // mapController.addCircle(CircleOptions(
     //   geometry: LatLng(lat + radius / 111.32, long),
@@ -290,10 +317,11 @@ class _JobMapScreenState extends State<JobMapScreen> {
     //   ));
     // });
 
-    List<SymbolOptions> unionSymbols = new List();
+
+    List<SymbolOptions> unionSymbolOptions = new List();
     for (int i = 0; i < union.length; i++) {
       if (union[i].nUnion == 0) break;
-      unionSymbols.add(SymbolOptions(
+      unionSymbolOptions.add(SymbolOptions(
           geometry: LatLng(
               union[i].lat / union[i].nUnion, union[i].long / union[i].nUnion),
           iconImage: 'assets/symbols/dry-clean.png',
@@ -305,10 +333,11 @@ class _JobMapScreenState extends State<JobMapScreen> {
           textColor: "#0097e6"));
     }
 
-    mapController.addSymbols(unionSymbols);
+    unionSymbols = new List();
+    unionSymbols = await mapController.addSymbols(unionSymbolOptions);
 
     // fukcing retard
-    _showMyDialog(nearByJob, lat, long, radius);
+    _showMyDialog(nearByJob);
 
     // debug boys, all these years testing waste
     // developer.log('unionSymbols:' + (unionSymbols).toString());

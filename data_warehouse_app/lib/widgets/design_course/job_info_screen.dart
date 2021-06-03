@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'description_limit_text.dart';
 import 'app_theme.dart';
 import 'package:wemapgl/wemapgl.dart';
@@ -141,6 +142,7 @@ class _JobInfoScreenState extends State<JobInfoScreen>
     super.initState();
 
     _route(0);
+
   }
 
   Future<void> setData() async {
@@ -467,7 +469,7 @@ class _JobInfoScreenState extends State<JobInfoScreen>
                                                   OneSequenceGestureRecognizer>>[
                                             Factory<
                                                 OneSequenceGestureRecognizer>(
-                                              () => EagerGestureRecognizer(),
+                                                  () => EagerGestureRecognizer(),
                                             ),
                                           ].toSet(),
                                         ),
