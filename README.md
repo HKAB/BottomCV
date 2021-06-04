@@ -1,3 +1,35 @@
+# BottomCV
+
+A Flutter application for finding a job for your fukin trash career (joke)
+
+
+## Installation
+
+This application requires
+
+```bash
+Wemap SDK, flutter
+```
+
+## Features
+
+* Show list job by category in home screen
+* Job detail screen have a map show route from current location to the job.
+* Find job around you by pre-set distance (job near by each other can be unioned).
+
+
+## Screenshots
+
+
+
+
+## Authors
+
+- [@katherinepeterson](https://www.github.com/octokatherine)
+
+
+
+
 
 # Flutter app for data-warehouse project
 

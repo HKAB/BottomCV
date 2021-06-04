@@ -7,7 +7,7 @@ import 'screens/navigation_home_screen.dart';
 import 'package:wemapgl/wemapgl.dart' as WEMAP;
 
 void main() {
-  WEMAP.Configuration.setWeMapKey('GqfwrZUEfxbwbnQUhtBMFivEysYIxelQ');
+  WEMAP.Configuration.setWeMapKey('YOURWEMAPDSK');
   runApp(MyApp());
 }
 
