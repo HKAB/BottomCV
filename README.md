@@ -1,6 +1,6 @@
 # BottomCV :office:
 
-A Flutter application for finding a job for your fukin trash career (joke)
+A Flutter application for finding a job for your ~~pathetic~~ career
 
 
 ## Installation
